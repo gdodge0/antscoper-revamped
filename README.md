@@ -6,6 +6,9 @@ Please note that rooms are typically closed on weekends and holidays.
 On days when rooms are open, they are usually open from 7am to 10pm.
 Rooms are sometimes reserved (especially before exams), so be prepared to leave a vacant classroom if asked.
 
+Also note the website doesn't consider Finals Week schedules.
+AntScoper will be inaccurate during these times.
+
 <img src="exclude/sample.png">
 
 ## Inner Workings
