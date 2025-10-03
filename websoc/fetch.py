@@ -49,4 +49,10 @@ def post(yearterm, coursecodes):
     url = 'https://www.reg.uci.edu/perl/WebSoc'
     query_template = '?YearTerm={}&CourseCodes={}&Submit=Text'
     query = query_template.format(yearterm, coursecodes)
-    return urllib.request.urlopen(url + query).read().decode('utf-8')
+    resource = urllib.request.urlopen(url + query)
+    encoding = 'utf-8'
+    try:
+        encoding = resource.headers.get_content_charset()
+    except:
+        pass
+    return resource.read().decode(encoding)
