@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 2,
+  "metadata": {
+    "term": "2026-92",
+    "terms": [
+      "2026-92",
+      "2027-03"
+    ],
+    "fetchedAt": "2026-10-29T13:00:00+00:00",
+    "source": "https://anteaterapi.com",
+    "bufferMinutes": 10,
+    "sections": 2,
+    "batches": 1,
+    "publicationId": "synthetic-dated-test",
+    "mode": "demo",
+    "dateRange": {
+      "start": "2026-09-20",
+      "end": "2027-03-20"
+    },
+    "demoDate": "2026-10-29"
+  },
+  "terms": [
+    {
+      "id": "2026-92",
+      "year": "2026",
+      "quarter": "Fall",
+      "instructionStart": "2026-09-24",
+      "instructionEnd": "2026-12-04",
+      "finalsStart": "2026-12-05",
+      "finalsEnd": "2026-12-11",
+      "socAvailable": "2026-05-02"
+    },
+    {
+      "id": "2027-03",
+      "year": "2027",
+      "quarter": "Winter",
+      "instructionStart": "2027-01-04",
+      "instructionEnd": "2027-03-12",
+      "finalsStart": "2027-03-13",
+      "finalsEnd": "2027-03-19",
+      "socAvailable": "2026-11-07"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "alp-1100",
+      "building": "alp",
+      "number": "1100",
+      "terms": [
+        "2026-92",
+        "2027-03"
+      ],
+      "uncertainFinals": [],
+      "meetings": [
+        {
+          "term": "2026-92",
+          "days": [
+            1,
+            4
+          ],
+          "start": 840,
+          "end": 930
+        },
+        {
+          "term": "2027-03",
+          "days": [
+            1
+          ],
+          "start": 600,
+          "end": 670
+        }
+      ],
+      "exams": [
+        {
+          "term": "2026-92",
+          "date": "2026-12-05",
+          "start": 480,
+          "end": 610
+        },
+        {
+          "term": "2026-92",
+          "date": "2026-12-08",
+          "start": 780,
+          "end": 910
+        }
+      ]
+    },
+    {
+      "id": "ssl-290",
+      "building": "ssl",
+      "number": "290",
+      "terms": [
+        "2026-92"
+      ],
+      "uncertainFinals": [
+        "2026-92"
+      ],
+      "meetings": [
+        {
+          "term": "2026-92",
+          "days": [
+            1
+          ],
+          "start": 600,
+          "end": 670
+        }
+      ],
+      "exams": []
+    }
+  ]
+}

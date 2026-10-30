@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-timeplacepattern = re.compile('((?:Su|M|Tu|W|Th|F|Sa)+\s*\d+:\d+-\s*\d+:\d+p?)\s+(\w+\s+\w+)')
+timeplacepattern = re.compile(r'((?:Su|M|Tu|W|Th|F|Sa)+\s*\d+:\d+-\s*\d+:\d+p?)\s+(\w+\s+\w+)')
 
 def parse_document(database, document, yearterm):
     'Extract room data from a websoc document.'
@@ -12,7 +12,7 @@ def parse_document(database, document, yearterm):
             if len(timeplaces) < 1:
                 continue
             elif len(timeplaces) > 1:
-                print('Warning: Multiple timeplace strings encountered.', timeplace)
+                raise ValueError('Multiple meeting places on one line; export requires review')
             time = timeplaces[0][0]
             place = timeplaces[0][1]
             if '*TBA*' in time or '*TBA*' in place: # remnant of old get_timeplace_indices
@@ -61,17 +61,17 @@ def iter_line(block):
 def parse_time(time):
     'Extract days and hours from a websoc time string.'
     timelow = time.lower()
-    days = re.findall('(su|m|tu|w|th|f|sa)', timelow)
-    start, end = re.findall('(\d+):(\d+)', timelow)
+    days = re.findall(r'(su|m|tu|w|th|f|sa)', timelow)
+    start, end = re.findall(r'(\d+):(\d+)', timelow)
     hour0 = int(start[0]) + int(start[1]) / 60.0
-    hour1 = int(end[0]) + (int(end[1]) + 10) / 60.0 # pad end with 10 minutes
-    hours = [hour0, hour1]
+    hour1 = int(end[0]) + int(end[1]) / 60.0
     if 'p' in timelow:
-        if hours[1] < 12:
-            if hours[0] < hours[1]:
-                hours[0] += 12
-            hours[1] += 12
-    return days, tuple(hours)
+        if hour1 < 12:
+            hour1 += 12
+        if hour0 < 12 and hour0 + 12 < hour1:
+            hour0 += 12
+    # Interpret AM/PM before adding the original ten-minute turnover buffer.
+    return days, (hour0, min(24, hour1 + 10 / 60))
 
 def parse_place(place):
     'Extract building and room from a websoc place string.'

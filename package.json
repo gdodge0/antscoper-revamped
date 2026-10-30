@@ -1,0 +1,22 @@
+{
+  "name": "antscoper",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "typecheck": "npm run typecheck --workspace frontend",
+    "test": "npm run test --workspace frontend && python3 -B -m unittest discover -s tests",
+    "data:refresh": "python3 -B -m worker refresh --root .runtime",
+    "worker": "python3 -B -m worker serve --root .runtime",
+    "test:browser": "npm run test:browser --workspace frontend",
+    "map:import": "python3 -B scripts/import_campus.py",
+    "map:check": "python3 -B scripts/import_campus.py --check"
+  }
+}

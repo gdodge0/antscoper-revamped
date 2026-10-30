@@ -1,2 +1,14 @@
 *.pyc
 venv
+node_modules/
+frontend/dist/
+__pycache__/
+*.pyc
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+.secrets/
+.runtime/
+*.log

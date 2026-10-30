@@ -1,0 +1,1746 @@
+{
+  "schemaVersion": 1,
+  "origin": [
+    -117.844421,
+    33.647179
+  ],
+  "bbox": [
+    -117.854,
+    33.64,
+    -117.8345,
+    33.653
+  ],
+  "displayBounds": [
+    -117.8538,
+    33.64,
+    -117.835,
+    33.652
+  ],
+  "districts": [
+    {
+      "id": "landmarks",
+      "name": "Campus landmarks",
+      "shortName": "Campus center",
+      "coordinate": [
+        -117.8423,
+        33.648
+      ],
+      "span": 530
+    },
+    {
+      "id": "humanities",
+      "name": "Humanities & Biology",
+      "shortName": "Humanities & Biology",
+      "coordinate": [
+        -117.8452,
+        33.6464
+      ],
+      "span": 570
+    },
+    {
+      "id": "sciences",
+      "name": "Physical Sciences",
+      "shortName": "Physical Sciences",
+      "coordinate": [
+        -117.8442,
+        33.6435
+      ],
+      "span": 480
+    },
+    {
+      "id": "engineering",
+      "name": "Engineering & ICS",
+      "shortName": "Engineering & ICS",
+      "coordinate": [
+        -117.8405,
+        33.6435
+      ],
+      "span": 430
+    },
+    {
+      "id": "social",
+      "name": "Social Sciences",
+      "shortName": "Social Sciences",
+      "coordinate": [
+        -117.8395,
+        33.6466
+      ],
+      "span": 390
+    },
+    {
+      "id": "east",
+      "name": "Business, Law & Education",
+      "shortName": "Business & Law",
+      "coordinate": [
+        -117.8371,
+        33.6471
+      ],
+      "span": 430
+    },
+    {
+      "id": "arts",
+      "name": "Arts & North Campus",
+      "shortName": "The Arts",
+      "coordinate": [
+        -117.8455,
+        33.6502
+      ],
+      "span": 430
+    },
+    {
+      "id": "health",
+      "name": "Health Sciences",
+      "shortName": "Health Sciences",
+      "coordinate": [
+        -117.852,
+        33.6427
+      ],
+      "span": 720
+    }
+  ],
+  "locations": [
+    {
+      "id": "alp",
+      "codes": [
+        "alp"
+      ],
+      "name": "Anteater Learning Pavilion",
+      "osm": [
+        "w631379319"
+      ],
+      "district": "humanities",
+      "floors": 3,
+      "height": 14.4,
+      "facade": "alp",
+      "bay": 3.1,
+      "references": [
+        "https://lmnarchitects.com/project/anteater-learning-pavilion-university-of-california-irvine",
+        "https://news.uci.edu/2016/12/08/student-population-growth-at-uci-spurs-construction-of-high-tech-classroom-facility/"
+      ],
+      "heightSource": "UCI two-/three-story description; authored ALP dimensions estimated from LMN photographs."
+    },
+    {
+      "id": "alh",
+      "codes": [
+        "alh"
+      ],
+      "name": "Aldrich Hall",
+      "osm": [
+        "w62646030"
+      ],
+      "district": "landmarks",
+      "floors": 5,
+      "height": 24.0,
+      "facade": "fins",
+      "bay": 2.7,
+      "references": [
+        "https://assets.concept3d.com/assets/463/aldrich-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.841263,
+        33.648518
+      ]
+    },
+    {
+      "id": "llib",
+      "codes": [
+        "llib"
+      ],
+      "name": "Langson Library",
+      "osm": [
+        "w1374185239"
+      ],
+      "district": "landmarks",
+      "floors": 5,
+      "height": 24.0,
+      "facade": "library",
+      "bay": 2.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/langson-library.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.841316,
+        33.646961
+      ]
+    },
+    {
+      "id": "slib",
+      "codes": [
+        "slib"
+      ],
+      "name": "Science Library",
+      "osm": [
+        "r2275965"
+      ],
+      "district": "landmarks",
+      "floors": 6,
+      "height": 26.26,
+      "facade": "library",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/science-library.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.846848,
+        33.645908
+      ]
+    },
+    {
+      "id": "sc",
+      "codes": [
+        "sc"
+      ],
+      "name": "Student Center",
+      "osm": [
+        "w157979894",
+        "w157979900"
+      ],
+      "district": "landmarks",
+      "floors": 3,
+      "height": 15.0,
+      "facade": "civic",
+      "bay": 4.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/student-center_1.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.842621,
+        33.648895
+      ]
+    },
+    {
+      "id": "hg",
+      "codes": [
+        "hg"
+      ],
+      "name": "Humanities Gateway",
+      "osm": [
+        "w157979859"
+      ],
+      "district": "humanities",
+      "floors": 4,
+      "height": 15.64,
+      "facade": "courtyard",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-gateway.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844467,
+        33.647934
+      ]
+    },
+    {
+      "id": "hh",
+      "codes": [
+        "hh"
+      ],
+      "name": "Humanities Hall",
+      "osm": [
+        "w157979860"
+      ],
+      "district": "humanities",
+      "floors": 2,
+      "height": 9.5,
+      "facade": "fins",
+      "bay": 1.9,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844238,
+        33.647396
+      ]
+    },
+    {
+      "id": "hib",
+      "codes": [
+        "hib"
+      ],
+      "name": "Humanities Instructional Bldg",
+      "osm": [
+        "w157979862"
+      ],
+      "district": "humanities",
+      "floors": 3,
+      "height": 13.0,
+      "facade": "courtyard",
+      "bay": 3.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-instructional-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.843956,
+        33.648296
+      ]
+    },
+    {
+      "id": "kh",
+      "codes": [
+        "kh"
+      ],
+      "name": "Krieger Hall",
+      "osm": [
+        "w157979867"
+      ],
+      "district": "humanities",
+      "floors": 3,
+      "height": 12.22,
+      "facade": "concrete",
+      "bay": 2.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/murray-krieger-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.843529,
+        33.647556
+      ]
+    },
+    {
+      "id": "sh",
+      "codes": [
+        "sh"
+      ],
+      "name": "Steinhaus Hall",
+      "osm": [
+        "w157979892"
+      ],
+      "district": "humanities",
+      "floors": 4,
+      "height": 17.46,
+      "facade": "bands",
+      "bay": 3.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/steinhaus-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845123,
+        33.646278
+      ]
+    },
+    {
+      "id": "bs3",
+      "codes": [
+        "bs3"
+      ],
+      "name": "Biological Sciences III",
+      "osm": [
+        "w158053273"
+      ],
+      "district": "humanities",
+      "floors": 4,
+      "height": 18.0,
+      "facade": "lab",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/biological-sciences-iii.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.846413,
+        33.645363
+      ]
+    },
+    {
+      "id": "mh",
+      "codes": [
+        "mh"
+      ],
+      "name": "McGaugh Hall",
+      "osm": [
+        "w157979868"
+      ],
+      "district": "humanities",
+      "floors": 5,
+      "height": 26.98,
+      "facade": "ribbons",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mcgaugh-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844971,
+        33.645149
+      ]
+    },
+    {
+      "id": "hslh",
+      "codes": [
+        "hslh"
+      ],
+      "name": "Howard Schneiderman Lecture Hall",
+      "osm": [
+        "w157979881"
+      ],
+      "district": "humanities",
+      "floors": 1,
+      "height": 6.86,
+      "facade": "folded",
+      "bay": 5.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/howard-schneiderman-lecture-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844765,
+        33.645706
+      ]
+    },
+    {
+      "id": "ns1",
+      "codes": [
+        "ns1"
+      ],
+      "name": "Natural Sciences I",
+      "osm": [
+        "w158053296"
+      ],
+      "district": "humanities",
+      "floors": 4,
+      "height": 19.0,
+      "facade": "courtyard",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/natural-sciences-i.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845932,
+        33.644295
+      ]
+    },
+    {
+      "id": "ns2",
+      "codes": [
+        "ns2"
+      ],
+      "name": "Natural Sciences II",
+      "osm": [
+        "w158053272"
+      ],
+      "district": "humanities",
+      "floors": 5,
+      "height": 24.0,
+      "facade": "lab",
+      "bay": 3.7,
+      "references": [
+        "https://assets.concept3d.com/assets/463/natural-sciences-ii.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845352,
+        33.644012
+      ]
+    },
+    {
+      "id": "rh",
+      "codes": [
+        "rh"
+      ],
+      "name": "Rowland Hall",
+      "osm": [
+        "w157979880"
+      ],
+      "district": "sciences",
+      "floors": 5,
+      "height": 24.0,
+      "facade": "fins",
+      "bay": 2.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/rowland-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844139,
+        33.644611
+      ]
+    },
+    {
+      "id": "frh",
+      "codes": [
+        "frh"
+      ],
+      "name": "Frederick Reines Hall",
+      "osm": [
+        "w157979878"
+      ],
+      "district": "sciences",
+      "floors": 5,
+      "height": 24.0,
+      "facade": "courtyard",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/reines-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.843506,
+        33.644062
+      ]
+    },
+    {
+      "id": "mstb",
+      "codes": [
+        "mstb"
+      ],
+      "name": "Multipurpose Science & Technology Bldg",
+      "osm": [
+        "w171550883"
+      ],
+      "district": "sciences",
+      "floors": 2,
+      "height": 9.5,
+      "facade": "concrete",
+      "bay": 3.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/multipurpose-science-and-technology.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844482,
+        33.64217
+      ]
+    },
+    {
+      "id": "pscb",
+      "codes": [
+        "pscb"
+      ],
+      "name": "Physical Sciences Classroom Bldg",
+      "osm": [
+        "w158053292"
+      ],
+      "district": "sciences",
+      "floors": 2,
+      "height": 10.5,
+      "facade": "arcade",
+      "bay": 4.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/physical-sciences-classroom-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.843498,
+        33.643398
+      ]
+    },
+    {
+      "id": "pslh",
+      "codes": [
+        "pslh"
+      ],
+      "name": "Physical Sciences Lecture Hall",
+      "osm": [
+        "w158053267"
+      ],
+      "district": "sciences",
+      "floors": 2,
+      "height": 9.8,
+      "facade": "arcade",
+      "bay": 4.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/physical-sciences-lecture-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.843987,
+        33.643471
+      ]
+    },
+    {
+      "id": "pcb",
+      "codes": [
+        "pcb"
+      ],
+      "name": "Parkview Classroom Bldg",
+      "osm": [
+        "w157979872"
+      ],
+      "district": "sciences",
+      "floors": 1,
+      "height": 7.13,
+      "facade": "lecture",
+      "bay": 4.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/parkview-classroom-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.842796,
+        33.64447
+      ]
+    },
+    {
+      "id": "crh",
+      "codes": [
+        "crh"
+      ],
+      "name": "Croul Hall",
+      "osm": [
+        "w158053310"
+      ],
+      "district": "sciences",
+      "floors": 3,
+      "height": 15.0,
+      "facade": "atrium",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/croul-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844734,
+        33.643681
+      ]
+    },
+    {
+      "id": "eh",
+      "codes": [
+        "eh"
+      ],
+      "name": "Engineering Hall",
+      "osm": [
+        "w158053274"
+      ],
+      "district": "engineering",
+      "floors": 5,
+      "height": 23.0,
+      "facade": "atrium",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.841217,
+        33.643711
+      ]
+    },
+    {
+      "id": "et",
+      "codes": [
+        "et"
+      ],
+      "name": "Engineering Tower",
+      "osm": [
+        "w157979856"
+      ],
+      "district": "engineering",
+      "floors": 9,
+      "height": 38.32,
+      "facade": "fins",
+      "bay": 3.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-tower.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.841202,
+        33.644783
+      ]
+    },
+    {
+      "id": "dbh",
+      "codes": [
+        "dbh"
+      ],
+      "name": "Donald Bren Hall",
+      "osm": [
+        "w158053311"
+      ],
+      "district": "engineering",
+      "floors": 6,
+      "height": 27.6,
+      "facade": "lab",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/donald-bren-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.842026,
+        33.643238
+      ]
+    },
+    {
+      "id": "ics",
+      "codes": [
+        "ics"
+      ],
+      "name": "Information & Computer Science",
+      "osm": [
+        "r2114499"
+      ],
+      "district": "engineering",
+      "floors": 5,
+      "height": 21.5,
+      "facade": "fins",
+      "bay": 3.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/information-and-computer-science.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.841934,
+        33.644234
+      ]
+    },
+    {
+      "id": "ics2",
+      "codes": [
+        "ics2"
+      ],
+      "name": "Information & Computer Science 2",
+      "osm": [
+        "w157979866"
+      ],
+      "district": "engineering",
+      "floors": 2,
+      "height": 9.3,
+      "facade": "arcade",
+      "bay": 3.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/information-and-computer-science-ii.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.841751,
+        33.643906
+      ]
+    },
+    {
+      "id": "elh",
+      "codes": [
+        "elh"
+      ],
+      "name": "Engineering Lecture Hall",
+      "osm": [
+        "w157979855"
+      ],
+      "district": "engineering",
+      "floors": 1,
+      "height": 7.11,
+      "facade": "arcade",
+      "bay": 4.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-lecture-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840836,
+        33.644417
+      ]
+    },
+    {
+      "id": "mde",
+      "codes": [
+        "mde"
+      ],
+      "name": "McDonnell Douglas Engineering Auditorium",
+      "osm": [
+        "w158053286"
+      ],
+      "district": "engineering",
+      "floors": 2,
+      "height": 10.5,
+      "facade": "lecture",
+      "bay": 4.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mcdonnell-douglas-engineering-auditorium.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840797,
+        33.644012
+      ]
+    },
+    {
+      "id": "rec",
+      "codes": [
+        "rec"
+      ],
+      "name": "Rockwell Engineering Center",
+      "osm": [
+        "w158053291"
+      ],
+      "district": "engineering",
+      "floors": 3,
+      "height": 13.5,
+      "facade": "concrete",
+      "bay": 3.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/rockwell-engineering-center.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840691,
+        33.643803
+      ]
+    },
+    {
+      "id": "elf",
+      "codes": [
+        "elf"
+      ],
+      "name": "Engineering Laboratory Facility",
+      "osm": [
+        "w158053301"
+      ],
+      "district": "engineering",
+      "floors": 1,
+      "height": 6.5,
+      "facade": "workshop",
+      "bay": 5.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-laboratory-facility.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839806,
+        33.643684
+      ]
+    },
+    {
+      "id": "ect",
+      "codes": [
+        "ect"
+      ],
+      "name": "Engineering & Computing Trailer",
+      "osm": [
+        "w158053268"
+      ],
+      "district": "engineering",
+      "floors": 1,
+      "height": 4.1,
+      "facade": "modular",
+      "bay": 3.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-and-comuting-trailer.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840218,
+        33.643902
+      ]
+    },
+    {
+      "id": "airb",
+      "codes": [
+        "airb"
+      ],
+      "name": "Anteater Instruction & Research Bldg",
+      "osm": [
+        "w184993826"
+      ],
+      "district": "engineering",
+      "floors": 4,
+      "height": 18.5,
+      "facade": "bands",
+      "bay": 4.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/anteater-instruction-and-research-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.838219,
+        33.642876
+      ]
+    },
+    {
+      "id": "iseb",
+      "codes": [
+        "iseb"
+      ],
+      "name": "Interdisciplinary Science & Engineering Building",
+      "osm": [
+        "w783484955"
+      ],
+      "district": "sciences",
+      "floors": 6,
+      "height": 29.5,
+      "facade": "screens",
+      "bay": 3.2,
+      "references": [
+        "https://designandconstruction.uci.edu/projects/interdisciplinary-science-and-engineering-building/index.php"
+      ],
+      "heightSource": "Estimated story heights; building identity and story count cross-checked against UCI reference (UEA single-story massing approximate)."
+    },
+    {
+      "id": "ssl",
+      "codes": [
+        "ssl"
+      ],
+      "name": "Social Science Lab",
+      "osm": [
+        "w157979886"
+      ],
+      "district": "social",
+      "floors": 3,
+      "height": 13.2,
+      "facade": "bands",
+      "bay": 3.7,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-lab.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839981,
+        33.645809
+      ]
+    },
+    {
+      "id": "sst",
+      "codes": [
+        "sst"
+      ],
+      "name": "Social Science Tower",
+      "osm": [
+        "w157979887"
+      ],
+      "district": "social",
+      "floors": 10,
+      "height": 41.0,
+      "facade": "fins",
+      "bay": 2.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-tower.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840385,
+        33.6464
+      ]
+    },
+    {
+      "id": "ssh",
+      "codes": [
+        "ssh"
+      ],
+      "name": "Social Science Hall",
+      "osm": [
+        "w157979885"
+      ],
+      "district": "social",
+      "floors": 1,
+      "height": 7.8,
+      "facade": "arcade",
+      "bay": 5.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840096,
+        33.646236
+      ]
+    },
+    {
+      "id": "sspa",
+      "codes": [
+        "sspa"
+      ],
+      "name": "Social Science Plaza A",
+      "osm": [
+        "w184993837"
+      ],
+      "district": "social",
+      "floors": 4,
+      "height": 20.5,
+      "facade": "balconies",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-plaza-a.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839584,
+        33.646805
+      ]
+    },
+    {
+      "id": "sspb",
+      "codes": [
+        "sspb"
+      ],
+      "name": "Social Science Plaza B",
+      "osm": [
+        "w184993835"
+      ],
+      "district": "social",
+      "floors": 4,
+      "height": 20.5,
+      "facade": "balconies",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-plaza-b.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839188,
+        33.647045
+      ]
+    },
+    {
+      "id": "sslh",
+      "codes": [
+        "sslh"
+      ],
+      "name": "Social Science Lecture Hall",
+      "osm": [
+        "w184993897"
+      ],
+      "district": "social",
+      "floors": 1,
+      "height": 8.3,
+      "facade": "arcade",
+      "bay": 4.7,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-lecture-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839729,
+        33.647263
+      ]
+    },
+    {
+      "id": "sstr",
+      "codes": [
+        "sstr"
+      ],
+      "name": "Social Science Trailer",
+      "osm": [
+        "w157979889",
+        "w157979890"
+      ],
+      "district": "social",
+      "floors": 1,
+      "height": 4.05,
+      "facade": "modular",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-trailer.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.840302,
+        33.646996
+      ]
+    },
+    {
+      "id": "se",
+      "codes": [
+        "se"
+      ],
+      "name": "Social Ecology I",
+      "osm": [
+        "w184993828"
+      ],
+      "district": "social",
+      "floors": 3,
+      "height": 12.19,
+      "facade": "concrete",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-ecology-i.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839043,
+        33.646172
+      ]
+    },
+    {
+      "id": "se2",
+      "codes": [
+        "se2"
+      ],
+      "name": "Social Ecology II",
+      "osm": [
+        "w184993834"
+      ],
+      "district": "social",
+      "floors": 3,
+      "height": 14.0,
+      "facade": "balconies",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-ecology-ii.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839241,
+        33.646534
+      ]
+    },
+    {
+      "id": "sbsg",
+      "codes": [
+        "sbsg"
+      ],
+      "name": "Social & Behavioral Sciences Gateway",
+      "osm": [
+        "w184993895"
+      ],
+      "district": "social",
+      "floors": 5,
+      "height": 22.5,
+      "facade": "balconies",
+      "bay": 3.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-and-behavioral-sciences-gateway.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.839233,
+        33.647377
+      ]
+    },
+    {
+      "id": "sb1",
+      "codes": [
+        "sb1"
+      ],
+      "name": "School of Business I",
+      "osm": [
+        "w633498602"
+      ],
+      "district": "east",
+      "floors": 5,
+      "height": 24.5,
+      "facade": "screens",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/business-i.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.838242,
+        33.647133
+      ]
+    },
+    {
+      "id": "sb2",
+      "codes": [
+        "sb2"
+      ],
+      "name": "School of Business II",
+      "osm": [
+        "w184993856"
+      ],
+      "district": "east",
+      "floors": 3,
+      "height": 14.2,
+      "facade": "concrete",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/business-ii.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.838097,
+        33.646736
+      ]
+    },
+    {
+      "id": "educ",
+      "codes": [
+        "educ"
+      ],
+      "name": "Education",
+      "osm": [
+        "w171550880"
+      ],
+      "district": "east",
+      "floors": 3,
+      "height": 13.6,
+      "facade": "concrete",
+      "bay": 3.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/education.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.83606,
+        33.647472
+      ]
+    },
+    {
+      "id": "law",
+      "codes": [
+        "law"
+      ],
+      "name": "Law Building",
+      "osm": [
+        "w171550906"
+      ],
+      "district": "east",
+      "floors": 3,
+      "height": 13.6,
+      "facade": "concrete",
+      "bay": 3.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/law.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.835983,
+        33.646851
+      ]
+    },
+    {
+      "id": "mpaa",
+      "codes": [
+        "mpaa"
+      ],
+      "name": "Multipurpose Academic & Administrative Building",
+      "osm": [
+        "w707966331"
+      ],
+      "district": "east",
+      "floors": 4,
+      "height": 18.0,
+      "facade": "atrium",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/multipurpose-academic-and-admin-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.836861,
+        33.647007
+      ]
+    },
+    {
+      "id": "uea",
+      "codes": [
+        "uea",
+        "unexa"
+      ],
+      "name": "Undergraduate Education A",
+      "osm": [
+        "w184993894"
+      ],
+      "district": "east",
+      "floors": 1,
+      "height": 4.5,
+      "facade": "modular",
+      "bay": 3.7,
+      "references": [
+        "https://zotspot.uci.edu/uuadvising/rsvp_boot?id=1948915"
+      ],
+      "heightSource": "Estimated story heights; building identity and story count cross-checked against UCI reference (UEA single-story massing approximate)."
+    },
+    {
+      "id": "act",
+      "codes": [
+        "act"
+      ],
+      "name": "Art, Culture & Technology",
+      "osm": [
+        "w168468698"
+      ],
+      "district": "arts",
+      "floors": 3,
+      "height": 13.35,
+      "facade": "studio",
+      "bay": 3.9,
+      "references": [
+        "https://assets.concept3d.com/assets/463/art-culture-and-technology.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.8452,
+        33.650486
+      ]
+    },
+    {
+      "id": "cac",
+      "codes": [
+        "cac"
+      ],
+      "name": "Contemporary Arts Center",
+      "osm": [
+        "w638340600"
+      ],
+      "district": "arts",
+      "floors": 4,
+      "height": 18.5,
+      "facade": "atrium",
+      "bay": 3.4,
+      "references": [
+        "https://assets.concept3d.com/assets/463/contemporary-arts-center.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.84536,
+        33.649975
+      ]
+    },
+    {
+      "id": "aitr",
+      "codes": [
+        "aitr"
+      ],
+      "name": "Arts Instruction & Technology Resource Center",
+      "osm": [
+        "w157979871"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 10.0,
+      "facade": "arcade",
+      "bay": 4.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/arts-instruction-technology-resource-center.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.843987,
+        33.649822
+      ],
+      "note": "Shared OSM Music and Media complex; individual UCI label anchor retained. Selection outlines the connected exterior."
+    },
+    {
+      "id": "art",
+      "codes": [
+        "art"
+      ],
+      "name": "Art Studio",
+      "osm": [
+        "w168468700"
+      ],
+      "district": "arts",
+      "floors": 1,
+      "height": 6.8,
+      "facade": "folded",
+      "bay": 4.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/art-studio.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844917,
+        33.650249
+      ]
+    },
+    {
+      "id": "dra",
+      "codes": [
+        "dra"
+      ],
+      "name": "Drama Building",
+      "osm": [
+        "w158053269"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 10.2,
+      "facade": "studio",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/drama-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845131,
+        33.649673
+      ],
+      "note": "Shared OSM Claire Trevor Theatre/Drama complex; individual UCI label anchor retained."
+    },
+    {
+      "id": "ctt",
+      "codes": [
+        "ctt"
+      ],
+      "name": "Claire Trevor Theatre",
+      "osm": [
+        "w158053269"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 10.2,
+      "facade": "theatre",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/claire-trevor-theatre.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845436,
+        33.64954
+      ],
+      "note": "Shared OSM Claire Trevor Theatre/Drama complex; individual UCI label anchor retained."
+    },
+    {
+      "id": "ds",
+      "codes": [
+        "ds"
+      ],
+      "name": "Dance Studios",
+      "osm": [
+        "w158053307"
+      ],
+      "district": "arts",
+      "floors": 1,
+      "height": 8.5,
+      "facade": "theatre",
+      "bay": 4.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/robert-cohen-theatre.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845665,
+        33.649307
+      ]
+    },
+    {
+      "id": "scs",
+      "codes": [
+        "scs"
+      ],
+      "name": "Sculpture / Ceramic Studios / Nixon Theatre",
+      "osm": [
+        "w171550895"
+      ],
+      "district": "arts",
+      "floors": 1,
+      "height": 6.2,
+      "facade": "workshop",
+      "bay": 5.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/sculpture-studio.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844513,
+        33.65052
+      ]
+    },
+    {
+      "id": "mm",
+      "codes": [
+        "mm"
+      ],
+      "name": "Music & Media Bldg",
+      "osm": [
+        "w157979871"
+      ],
+      "district": "arts",
+      "floors": 3,
+      "height": 12.0,
+      "facade": "studio",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/music-and-media-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844551,
+        33.649361
+      ],
+      "note": "Shared OSM Music and Media complex; individual UCI label anchor retained. Selection outlines the connected exterior."
+    },
+    {
+      "id": "mab",
+      "codes": [
+        "mab"
+      ],
+      "name": "Mesa Arts Building",
+      "osm": [
+        "w158056898"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 9.2,
+      "facade": "bands",
+      "bay": 4.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mesa-arts-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.846359,
+        33.650852
+      ]
+    },
+    {
+      "id": "mob",
+      "codes": [
+        "mob"
+      ],
+      "name": "Mesa Office Building",
+      "osm": [
+        "w158056899"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 9.5,
+      "facade": "atrium",
+      "bay": 3.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mesa-office-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.846451,
+        33.651299
+      ]
+    },
+    {
+      "id": "pstu",
+      "codes": [
+        "pstu"
+      ],
+      "name": "William J. Gillespie Performance Studios",
+      "osm": [
+        "w168468701"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 10.8,
+      "facade": "studio",
+      "bay": 4.1,
+      "references": [
+        "https://assets.concept3d.com/assets/463/gillespie-performance-studios.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845612,
+        33.650486
+      ]
+    },
+    {
+      "id": "stu4",
+      "codes": [
+        "stu4"
+      ],
+      "name": "Studio Four",
+      "osm": [
+        "w168468697"
+      ],
+      "district": "arts",
+      "floors": 1,
+      "height": 7.8,
+      "facade": "pitched",
+      "bay": 4.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/studio-four.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845863,
+        33.650112
+      ]
+    },
+    {
+      "id": "wsh",
+      "codes": [
+        "wsh"
+      ],
+      "name": "Winifred Smith Hall",
+      "osm": [
+        "w157979871"
+      ],
+      "district": "arts",
+      "floors": 2,
+      "height": 10.0,
+      "facade": "lecture",
+      "bay": 4.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/winifred-smith-hall.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.844429,
+        33.649609
+      ],
+      "note": "Shared OSM Music and Media complex; individual UCI label anchor retained. Selection outlines the connected exterior."
+    },
+    {
+      "id": "hicf",
+      "codes": [
+        "hicf"
+      ],
+      "name": "Humanities Interim Classroom Facility / Studio Art Trailer",
+      "osm": [
+        "w158053285"
+      ],
+      "district": "humanities",
+      "floors": 1,
+      "height": 4.1,
+      "facade": "modular",
+      "bay": 4.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-interim-classroom-facility.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.847198,
+        33.646526
+      ],
+      "note": "OSM way labeled KUCI is corrected to HICF from the UCI building 523 marker and campus map; KUCI is in the separate southern footprint."
+    },
+    {
+      "id": "hrh",
+      "codes": [
+        "hrh",
+        "hhcr"
+      ],
+      "name": "Hewitt Research Hall",
+      "osm": [
+        "w184993832"
+      ],
+      "district": "health",
+      "floors": 3,
+      "height": 15.5,
+      "facade": "courtyard",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/hewitt-hall.jpg",
+        "https://icts.uci.edu/education-training/workshops-events/icts-k-club-grant-writing-series/"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.852226,
+        33.643349
+      ]
+    },
+    {
+      "id": "gnrf",
+      "codes": [
+        "gnrf"
+      ],
+      "name": "Gillespie Neuroscience Research Facility",
+      "osm": [
+        "w171557394"
+      ],
+      "district": "health",
+      "floors": 3,
+      "height": 14.0,
+      "facade": "atrium",
+      "bay": 3.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/gillespie-neuroscience-research-facility.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.851433,
+        33.644039
+      ]
+    },
+    {
+      "id": "ph",
+      "codes": [
+        "ph"
+      ],
+      "name": "Plumwood House (Hitachi, PH)",
+      "osm": [
+        "w184993836"
+      ],
+      "district": "health",
+      "floors": 3,
+      "height": 13.2,
+      "facade": "concrete",
+      "bay": 3.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/plumwood-house.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.851295,
+        33.644718
+      ]
+    },
+    {
+      "id": "iab",
+      "codes": [
+        "iab"
+      ],
+      "name": "Intercollegiate Athletics Building",
+      "osm": [
+        "w157979864"
+      ],
+      "district": "humanities",
+      "floors": 2,
+      "height": 10.5,
+      "facade": "civic",
+      "bay": 4.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/intercollegiate-athletics-building.jpg"
+      ],
+      "heightSource": "Visual estimate from UCI campus-map exterior photograph; floor height and roof details approximate.",
+      "labelCoordinate": [
+        -117.845695,
+        33.648296
+      ]
+    },
+    {
+      "id": "cohs",
+      "codes": [
+        "cohs"
+      ],
+      "name": "Susan & Henry Samueli College of Health Sciences",
+      "osm": [
+        "w953889353"
+      ],
+      "district": "health",
+      "floors": 5,
+      "height": 25.5,
+      "facade": "screens",
+      "bay": 3.0,
+      "references": [
+        "https://reservations.cohs.uci.edu/venues/susan-henry-samueli-college-of-health-sciences-building/"
+      ],
+      "heightSource": "Estimated story heights; building identity and story count cross-checked against UCI reference (UEA single-story massing approximate)."
+    }
+  ],
+  "roomOverrides": {
+    "uci-barn": "uci-barn",
+    "uci-mc": "uci-mc"
+  },
+  "outside": [
+    {
+      "id": "uci-barn",
+      "codes": [],
+      "name": "Farm School / Red Barn",
+      "status": "outside",
+      "note": "Eastern campus, outside the academic map.",
+      "references": [
+        "https://www.reg.uci.edu/addl/campus/index.old"
+      ]
+    },
+    {
+      "id": "uci-mc",
+      "codes": [],
+      "name": "UCI Medical Center",
+      "status": "outside",
+      "note": "Medical Center location; outside the academic campus.",
+      "references": [
+        "https://www.reg.uci.edu/addl/campus/index.old"
+      ]
+    }
+  ],
+  "codeOverrides": {
+    "uci": {
+      "status": "unresolved",
+      "name": "UCI location",
+      "note": "Resolve BARN and MC using the full room ID; never assign a shared pin."
+    }
+  },
+  "excludeGeometry": {
+    "w171169252": "Langson Library duplicates the co-located layer=1 building w1374185239; outlines are identical apart from collinear nodes."
+  },
+  "retrievedAt": "2026-10-29"
+}

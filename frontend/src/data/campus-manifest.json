@@ -1,0 +1,1681 @@
+{
+  "schemaVersion": 1,
+  "origin": [
+    -117.844421,
+    33.647179
+  ],
+  "bounds": [
+    -117.8538,
+    33.64,
+    -117.835,
+    33.652
+  ],
+  "districts": [
+    {
+      "id": "landmarks",
+      "name": "Campus landmarks",
+      "shortName": "Campus center",
+      "coordinate": [
+        -117.8423,
+        33.648
+      ],
+      "span": 530
+    },
+    {
+      "id": "humanities",
+      "name": "Humanities & Biology",
+      "shortName": "Humanities & Biology",
+      "coordinate": [
+        -117.8452,
+        33.6464
+      ],
+      "span": 570
+    },
+    {
+      "id": "sciences",
+      "name": "Physical Sciences",
+      "shortName": "Physical Sciences",
+      "coordinate": [
+        -117.8442,
+        33.6435
+      ],
+      "span": 480
+    },
+    {
+      "id": "engineering",
+      "name": "Engineering & ICS",
+      "shortName": "Engineering & ICS",
+      "coordinate": [
+        -117.8405,
+        33.6435
+      ],
+      "span": 430
+    },
+    {
+      "id": "social",
+      "name": "Social Sciences",
+      "shortName": "Social Sciences",
+      "coordinate": [
+        -117.8395,
+        33.6466
+      ],
+      "span": 390
+    },
+    {
+      "id": "east",
+      "name": "Business, Law & Education",
+      "shortName": "Business & Law",
+      "coordinate": [
+        -117.8371,
+        33.6471
+      ],
+      "span": 430
+    },
+    {
+      "id": "arts",
+      "name": "Arts & North Campus",
+      "shortName": "The Arts",
+      "coordinate": [
+        -117.8455,
+        33.6502
+      ],
+      "span": 430
+    },
+    {
+      "id": "health",
+      "name": "Health Sciences",
+      "shortName": "Health Sciences",
+      "coordinate": [
+        -117.852,
+        33.6427
+      ],
+      "span": 720
+    }
+  ],
+  "locations": [
+    {
+      "id": "alp",
+      "name": "Anteater Learning Pavilion",
+      "codes": [
+        "alp"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.84454671264234,
+        33.647091217121044
+      ],
+      "geometryIds": [
+        "w631379319"
+      ],
+      "height": 14.4,
+      "references": [
+        "https://lmnarchitects.com/project/anteater-learning-pavilion-university-of-california-irvine",
+        "https://news.uci.edu/2016/12/08/student-population-growth-at-uci-spurs-construction-of-high-tech-classroom-facility/"
+      ],
+      "note": ""
+    },
+    {
+      "id": "alh",
+      "name": "Aldrich Hall",
+      "codes": [
+        "alh"
+      ],
+      "status": "verified",
+      "district": "landmarks",
+      "coordinate": [
+        -117.841263,
+        33.648518
+      ],
+      "geometryIds": [
+        "w62646030"
+      ],
+      "height": 24.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/aldrich-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "llib",
+      "name": "Langson Library",
+      "codes": [
+        "llib"
+      ],
+      "status": "verified",
+      "district": "landmarks",
+      "coordinate": [
+        -117.841316,
+        33.646961
+      ],
+      "geometryIds": [
+        "w1374185239"
+      ],
+      "height": 24.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/langson-library.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "slib",
+      "name": "Science Library",
+      "codes": [
+        "slib"
+      ],
+      "status": "verified",
+      "district": "landmarks",
+      "coordinate": [
+        -117.846848,
+        33.645908
+      ],
+      "geometryIds": [
+        "r2275965"
+      ],
+      "height": 26.26,
+      "references": [
+        "https://assets.concept3d.com/assets/463/science-library.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sc",
+      "name": "Student Center",
+      "codes": [
+        "sc"
+      ],
+      "status": "verified",
+      "district": "landmarks",
+      "coordinate": [
+        -117.842621,
+        33.648895
+      ],
+      "geometryIds": [
+        "w157979894",
+        "w157979900"
+      ],
+      "height": 15.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/student-center_1.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "hg",
+      "name": "Humanities Gateway",
+      "codes": [
+        "hg"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.844467,
+        33.647934
+      ],
+      "geometryIds": [
+        "w157979859"
+      ],
+      "height": 15.64,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-gateway.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "hh",
+      "name": "Humanities Hall",
+      "codes": [
+        "hh"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.844238,
+        33.647396
+      ],
+      "geometryIds": [
+        "w157979860"
+      ],
+      "height": 9.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "hib",
+      "name": "Humanities Instructional Bldg",
+      "codes": [
+        "hib"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.843956,
+        33.648296
+      ],
+      "geometryIds": [
+        "w157979862"
+      ],
+      "height": 13.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-instructional-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "kh",
+      "name": "Krieger Hall",
+      "codes": [
+        "kh"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.843529,
+        33.647556
+      ],
+      "geometryIds": [
+        "w157979867"
+      ],
+      "height": 12.22,
+      "references": [
+        "https://assets.concept3d.com/assets/463/murray-krieger-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sh",
+      "name": "Steinhaus Hall",
+      "codes": [
+        "sh"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.845123,
+        33.646278
+      ],
+      "geometryIds": [
+        "w157979892"
+      ],
+      "height": 17.46,
+      "references": [
+        "https://assets.concept3d.com/assets/463/steinhaus-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "bs3",
+      "name": "Biological Sciences III",
+      "codes": [
+        "bs3"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.846413,
+        33.645363
+      ],
+      "geometryIds": [
+        "w158053273"
+      ],
+      "height": 18.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/biological-sciences-iii.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mh",
+      "name": "McGaugh Hall",
+      "codes": [
+        "mh"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.844971,
+        33.645149
+      ],
+      "geometryIds": [
+        "w157979868"
+      ],
+      "height": 26.98,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mcgaugh-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "hslh",
+      "name": "Howard Schneiderman Lecture Hall",
+      "codes": [
+        "hslh"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.844765,
+        33.645706
+      ],
+      "geometryIds": [
+        "w157979881"
+      ],
+      "height": 6.86,
+      "references": [
+        "https://assets.concept3d.com/assets/463/howard-schneiderman-lecture-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ns1",
+      "name": "Natural Sciences I",
+      "codes": [
+        "ns1"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.845932,
+        33.644295
+      ],
+      "geometryIds": [
+        "w158053296"
+      ],
+      "height": 19.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/natural-sciences-i.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ns2",
+      "name": "Natural Sciences II",
+      "codes": [
+        "ns2"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.845352,
+        33.644012
+      ],
+      "geometryIds": [
+        "w158053272"
+      ],
+      "height": 24.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/natural-sciences-ii.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "rh",
+      "name": "Rowland Hall",
+      "codes": [
+        "rh"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.844139,
+        33.644611
+      ],
+      "geometryIds": [
+        "w157979880"
+      ],
+      "height": 24.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/rowland-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "frh",
+      "name": "Frederick Reines Hall",
+      "codes": [
+        "frh"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.843506,
+        33.644062
+      ],
+      "geometryIds": [
+        "w157979878"
+      ],
+      "height": 24.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/reines-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mstb",
+      "name": "Multipurpose Science & Technology Bldg",
+      "codes": [
+        "mstb"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.844482,
+        33.64217
+      ],
+      "geometryIds": [
+        "w171550883"
+      ],
+      "height": 9.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/multipurpose-science-and-technology.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "pscb",
+      "name": "Physical Sciences Classroom Bldg",
+      "codes": [
+        "pscb"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.843498,
+        33.643398
+      ],
+      "geometryIds": [
+        "w158053292"
+      ],
+      "height": 10.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/physical-sciences-classroom-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "pslh",
+      "name": "Physical Sciences Lecture Hall",
+      "codes": [
+        "pslh"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.843987,
+        33.643471
+      ],
+      "geometryIds": [
+        "w158053267"
+      ],
+      "height": 9.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/physical-sciences-lecture-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "pcb",
+      "name": "Parkview Classroom Bldg",
+      "codes": [
+        "pcb"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.842796,
+        33.64447
+      ],
+      "geometryIds": [
+        "w157979872"
+      ],
+      "height": 7.13,
+      "references": [
+        "https://assets.concept3d.com/assets/463/parkview-classroom-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "crh",
+      "name": "Croul Hall",
+      "codes": [
+        "crh"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.844734,
+        33.643681
+      ],
+      "geometryIds": [
+        "w158053310"
+      ],
+      "height": 15.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/croul-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "eh",
+      "name": "Engineering Hall",
+      "codes": [
+        "eh"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.841217,
+        33.643711
+      ],
+      "geometryIds": [
+        "w158053274"
+      ],
+      "height": 23.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "et",
+      "name": "Engineering Tower",
+      "codes": [
+        "et"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.841202,
+        33.644783
+      ],
+      "geometryIds": [
+        "w157979856"
+      ],
+      "height": 38.32,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-tower.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "dbh",
+      "name": "Donald Bren Hall",
+      "codes": [
+        "dbh"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.842026,
+        33.643238
+      ],
+      "geometryIds": [
+        "w158053311"
+      ],
+      "height": 27.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/donald-bren-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ics",
+      "name": "Information & Computer Science",
+      "codes": [
+        "ics"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.841934,
+        33.644234
+      ],
+      "geometryIds": [
+        "r2114499"
+      ],
+      "height": 21.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/information-and-computer-science.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ics2",
+      "name": "Information & Computer Science 2",
+      "codes": [
+        "ics2"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.841751,
+        33.643906
+      ],
+      "geometryIds": [
+        "w157979866"
+      ],
+      "height": 9.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/information-and-computer-science-ii.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "elh",
+      "name": "Engineering Lecture Hall",
+      "codes": [
+        "elh"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.840836,
+        33.644417
+      ],
+      "geometryIds": [
+        "w157979855"
+      ],
+      "height": 7.11,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-lecture-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mde",
+      "name": "McDonnell Douglas Engineering Auditorium",
+      "codes": [
+        "mde"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.840797,
+        33.644012
+      ],
+      "geometryIds": [
+        "w158053286"
+      ],
+      "height": 10.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mcdonnell-douglas-engineering-auditorium.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "rec",
+      "name": "Rockwell Engineering Center",
+      "codes": [
+        "rec"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.840691,
+        33.643803
+      ],
+      "geometryIds": [
+        "w158053291"
+      ],
+      "height": 13.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/rockwell-engineering-center.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "elf",
+      "name": "Engineering Laboratory Facility",
+      "codes": [
+        "elf"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.839806,
+        33.643684
+      ],
+      "geometryIds": [
+        "w158053301"
+      ],
+      "height": 6.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-laboratory-facility.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ect",
+      "name": "Engineering & Computing Trailer",
+      "codes": [
+        "ect"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.840218,
+        33.643902
+      ],
+      "geometryIds": [
+        "w158053268"
+      ],
+      "height": 4.1,
+      "references": [
+        "https://assets.concept3d.com/assets/463/engineering-and-comuting-trailer.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "airb",
+      "name": "Anteater Instruction & Research Bldg",
+      "codes": [
+        "airb"
+      ],
+      "status": "verified",
+      "district": "engineering",
+      "coordinate": [
+        -117.838219,
+        33.642876
+      ],
+      "geometryIds": [
+        "w184993826"
+      ],
+      "height": 18.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/anteater-instruction-and-research-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "iseb",
+      "name": "Interdisciplinary Science & Engineering Building",
+      "codes": [
+        "iseb"
+      ],
+      "status": "verified",
+      "district": "sciences",
+      "coordinate": [
+        -117.8438542155071,
+        33.64294234214693
+      ],
+      "geometryIds": [
+        "w783484955"
+      ],
+      "height": 29.5,
+      "references": [
+        "https://designandconstruction.uci.edu/projects/interdisciplinary-science-and-engineering-building/index.php"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ssl",
+      "name": "Social Science Lab",
+      "codes": [
+        "ssl"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839981,
+        33.645809
+      ],
+      "geometryIds": [
+        "w157979886"
+      ],
+      "height": 13.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-lab.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sst",
+      "name": "Social Science Tower",
+      "codes": [
+        "sst"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.840385,
+        33.6464
+      ],
+      "geometryIds": [
+        "w157979887"
+      ],
+      "height": 41.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-tower.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ssh",
+      "name": "Social Science Hall",
+      "codes": [
+        "ssh"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.840096,
+        33.646236
+      ],
+      "geometryIds": [
+        "w157979885"
+      ],
+      "height": 7.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sspa",
+      "name": "Social Science Plaza A",
+      "codes": [
+        "sspa"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839584,
+        33.646805
+      ],
+      "geometryIds": [
+        "w184993837"
+      ],
+      "height": 20.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-plaza-a.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sspb",
+      "name": "Social Science Plaza B",
+      "codes": [
+        "sspb"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839188,
+        33.647045
+      ],
+      "geometryIds": [
+        "w184993835"
+      ],
+      "height": 20.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-plaza-b.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sslh",
+      "name": "Social Science Lecture Hall",
+      "codes": [
+        "sslh"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839729,
+        33.647263
+      ],
+      "geometryIds": [
+        "w184993897"
+      ],
+      "height": 8.3,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-lecture-hall.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sstr",
+      "name": "Social Science Trailer",
+      "codes": [
+        "sstr"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.840302,
+        33.646996
+      ],
+      "geometryIds": [
+        "w157979889",
+        "w157979890"
+      ],
+      "height": 4.05,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-science-trailer.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "se",
+      "name": "Social Ecology I",
+      "codes": [
+        "se"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839043,
+        33.646172
+      ],
+      "geometryIds": [
+        "w184993828"
+      ],
+      "height": 12.19,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-ecology-i.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "se2",
+      "name": "Social Ecology II",
+      "codes": [
+        "se2"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839241,
+        33.646534
+      ],
+      "geometryIds": [
+        "w184993834"
+      ],
+      "height": 14.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-ecology-ii.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sbsg",
+      "name": "Social & Behavioral Sciences Gateway",
+      "codes": [
+        "sbsg"
+      ],
+      "status": "verified",
+      "district": "social",
+      "coordinate": [
+        -117.839233,
+        33.647377
+      ],
+      "geometryIds": [
+        "w184993895"
+      ],
+      "height": 22.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/social-and-behavioral-sciences-gateway.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sb1",
+      "name": "School of Business I",
+      "codes": [
+        "sb1"
+      ],
+      "status": "verified",
+      "district": "east",
+      "coordinate": [
+        -117.838242,
+        33.647133
+      ],
+      "geometryIds": [
+        "w633498602"
+      ],
+      "height": 24.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/business-i.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sb2",
+      "name": "School of Business II",
+      "codes": [
+        "sb2"
+      ],
+      "status": "verified",
+      "district": "east",
+      "coordinate": [
+        -117.838097,
+        33.646736
+      ],
+      "geometryIds": [
+        "w184993856"
+      ],
+      "height": 14.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/business-ii.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "educ",
+      "name": "Education",
+      "codes": [
+        "educ"
+      ],
+      "status": "verified",
+      "district": "east",
+      "coordinate": [
+        -117.83606,
+        33.647472
+      ],
+      "geometryIds": [
+        "w171550880"
+      ],
+      "height": 13.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/education.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "law",
+      "name": "Law Building",
+      "codes": [
+        "law"
+      ],
+      "status": "verified",
+      "district": "east",
+      "coordinate": [
+        -117.835983,
+        33.646851
+      ],
+      "geometryIds": [
+        "w171550906"
+      ],
+      "height": 13.6,
+      "references": [
+        "https://assets.concept3d.com/assets/463/law.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mpaa",
+      "name": "Multipurpose Academic & Administrative Building",
+      "codes": [
+        "mpaa"
+      ],
+      "status": "verified",
+      "district": "east",
+      "coordinate": [
+        -117.836861,
+        33.647007
+      ],
+      "geometryIds": [
+        "w707966331"
+      ],
+      "height": 18.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/multipurpose-academic-and-admin-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "uea",
+      "name": "Undergraduate Education A",
+      "codes": [
+        "uea",
+        "unexa"
+      ],
+      "status": "verified",
+      "district": "east",
+      "coordinate": [
+        -117.83649002922418,
+        33.64626666555746
+      ],
+      "geometryIds": [
+        "w184993894"
+      ],
+      "height": 4.5,
+      "references": [
+        "https://zotspot.uci.edu/uuadvising/rsvp_boot?id=1948915"
+      ],
+      "note": ""
+    },
+    {
+      "id": "act",
+      "name": "Art, Culture & Technology",
+      "codes": [
+        "act"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.8452,
+        33.650486
+      ],
+      "geometryIds": [
+        "w168468698"
+      ],
+      "height": 13.35,
+      "references": [
+        "https://assets.concept3d.com/assets/463/art-culture-and-technology.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "cac",
+      "name": "Contemporary Arts Center",
+      "codes": [
+        "cac"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.84536,
+        33.649975
+      ],
+      "geometryIds": [
+        "w638340600"
+      ],
+      "height": 18.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/contemporary-arts-center.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "aitr",
+      "name": "Arts Instruction & Technology Resource Center",
+      "codes": [
+        "aitr"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.843987,
+        33.649822
+      ],
+      "geometryIds": [
+        "w157979871"
+      ],
+      "height": 10.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/arts-instruction-technology-resource-center.jpg"
+      ],
+      "note": "Shared OSM Music and Media complex; individual UCI label anchor retained. Selection outlines the connected exterior."
+    },
+    {
+      "id": "art",
+      "name": "Art Studio",
+      "codes": [
+        "art"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.844917,
+        33.650249
+      ],
+      "geometryIds": [
+        "w168468700"
+      ],
+      "height": 6.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/art-studio.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "dra",
+      "name": "Drama Building",
+      "codes": [
+        "dra"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.845131,
+        33.649673
+      ],
+      "geometryIds": [
+        "w158053269"
+      ],
+      "height": 10.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/drama-building.jpg"
+      ],
+      "note": "Shared OSM Claire Trevor Theatre/Drama complex; individual UCI label anchor retained."
+    },
+    {
+      "id": "ctt",
+      "name": "Claire Trevor Theatre",
+      "codes": [
+        "ctt"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.845436,
+        33.64954
+      ],
+      "geometryIds": [
+        "w158053269"
+      ],
+      "height": 10.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/claire-trevor-theatre.jpg"
+      ],
+      "note": "Shared OSM Claire Trevor Theatre/Drama complex; individual UCI label anchor retained."
+    },
+    {
+      "id": "ds",
+      "name": "Dance Studios",
+      "codes": [
+        "ds"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.845665,
+        33.649307
+      ],
+      "geometryIds": [
+        "w158053307"
+      ],
+      "height": 8.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/robert-cohen-theatre.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "scs",
+      "name": "Sculpture / Ceramic Studios / Nixon Theatre",
+      "codes": [
+        "scs"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.844513,
+        33.65052
+      ],
+      "geometryIds": [
+        "w171550895"
+      ],
+      "height": 6.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/sculpture-studio.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mm",
+      "name": "Music & Media Bldg",
+      "codes": [
+        "mm"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.844551,
+        33.649361
+      ],
+      "geometryIds": [
+        "w157979871"
+      ],
+      "height": 12.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/music-and-media-building.jpg"
+      ],
+      "note": "Shared OSM Music and Media complex; individual UCI label anchor retained. Selection outlines the connected exterior."
+    },
+    {
+      "id": "mab",
+      "name": "Mesa Arts Building",
+      "codes": [
+        "mab"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.846359,
+        33.650852
+      ],
+      "geometryIds": [
+        "w158056898"
+      ],
+      "height": 9.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mesa-arts-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mob",
+      "name": "Mesa Office Building",
+      "codes": [
+        "mob"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.846451,
+        33.651299
+      ],
+      "geometryIds": [
+        "w158056899"
+      ],
+      "height": 9.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/mesa-office-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "pstu",
+      "name": "William J. Gillespie Performance Studios",
+      "codes": [
+        "pstu"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.845612,
+        33.650486
+      ],
+      "geometryIds": [
+        "w168468701"
+      ],
+      "height": 10.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/gillespie-performance-studios.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "stu4",
+      "name": "Studio Four",
+      "codes": [
+        "stu4"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.845863,
+        33.650112
+      ],
+      "geometryIds": [
+        "w168468697"
+      ],
+      "height": 7.8,
+      "references": [
+        "https://assets.concept3d.com/assets/463/studio-four.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wsh",
+      "name": "Winifred Smith Hall",
+      "codes": [
+        "wsh"
+      ],
+      "status": "verified",
+      "district": "arts",
+      "coordinate": [
+        -117.844429,
+        33.649609
+      ],
+      "geometryIds": [
+        "w157979871"
+      ],
+      "height": 10.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/winifred-smith-hall.jpg"
+      ],
+      "note": "Shared OSM Music and Media complex; individual UCI label anchor retained. Selection outlines the connected exterior."
+    },
+    {
+      "id": "hicf",
+      "name": "Humanities Interim Classroom Facility / Studio Art Trailer",
+      "codes": [
+        "hicf"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.847198,
+        33.646526
+      ],
+      "geometryIds": [
+        "w158053285"
+      ],
+      "height": 4.1,
+      "references": [
+        "https://assets.concept3d.com/assets/463/humanities-interim-classroom-facility.jpg"
+      ],
+      "note": "OSM way labeled KUCI is corrected to HICF from the UCI building 523 marker and campus map; KUCI is in the separate southern footprint."
+    },
+    {
+      "id": "hrh",
+      "name": "Hewitt Research Hall",
+      "codes": [
+        "hrh",
+        "hhcr"
+      ],
+      "status": "verified",
+      "district": "health",
+      "coordinate": [
+        -117.852226,
+        33.643349
+      ],
+      "geometryIds": [
+        "w184993832"
+      ],
+      "height": 15.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/hewitt-hall.jpg",
+        "https://icts.uci.edu/education-training/workshops-events/icts-k-club-grant-writing-series/"
+      ],
+      "note": ""
+    },
+    {
+      "id": "gnrf",
+      "name": "Gillespie Neuroscience Research Facility",
+      "codes": [
+        "gnrf"
+      ],
+      "status": "verified",
+      "district": "health",
+      "coordinate": [
+        -117.851433,
+        33.644039
+      ],
+      "geometryIds": [
+        "w171557394"
+      ],
+      "height": 14.0,
+      "references": [
+        "https://assets.concept3d.com/assets/463/gillespie-neuroscience-research-facility.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ph",
+      "name": "Plumwood House (Hitachi, PH)",
+      "codes": [
+        "ph"
+      ],
+      "status": "verified",
+      "district": "health",
+      "coordinate": [
+        -117.851295,
+        33.644718
+      ],
+      "geometryIds": [
+        "w184993836"
+      ],
+      "height": 13.2,
+      "references": [
+        "https://assets.concept3d.com/assets/463/plumwood-house.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "iab",
+      "name": "Intercollegiate Athletics Building",
+      "codes": [
+        "iab"
+      ],
+      "status": "verified",
+      "district": "humanities",
+      "coordinate": [
+        -117.845695,
+        33.648296
+      ],
+      "geometryIds": [
+        "w157979864"
+      ],
+      "height": 10.5,
+      "references": [
+        "https://assets.concept3d.com/assets/463/intercollegiate-athletics-building.jpg"
+      ],
+      "note": ""
+    },
+    {
+      "id": "cohs",
+      "name": "Susan & Henry Samueli College of Health Sciences",
+      "codes": [
+        "cohs"
+      ],
+      "status": "verified",
+      "district": "health",
+      "coordinate": [
+        -117.85316086999279,
+        33.64087819210814
+      ],
+      "geometryIds": [
+        "w953889353"
+      ],
+      "height": 25.5,
+      "references": [
+        "https://reservations.cohs.uci.edu/venues/susan-henry-samueli-college-of-health-sciences-building/"
+      ],
+      "note": ""
+    },
+    {
+      "id": "uci-barn",
+      "codes": [],
+      "name": "Farm School / Red Barn",
+      "status": "outside",
+      "note": "Eastern campus, outside the academic map.",
+      "references": [
+        "https://www.reg.uci.edu/addl/campus/index.old"
+      ]
+    },
+    {
+      "id": "uci-mc",
+      "codes": [],
+      "name": "UCI Medical Center",
+      "status": "outside",
+      "note": "Medical Center location; outside the academic campus.",
+      "references": [
+        "https://www.reg.uci.edu/addl/campus/index.old"
+      ]
+    },
+    {
+      "id": "uci",
+      "codes": [
+        "uci"
+      ],
+      "status": "unresolved",
+      "name": "UCI location",
+      "note": "Resolve BARN and MC using the full room ID; never assign a shared pin."
+    }
+  ],
+  "codes": {
+    "alp": "alp",
+    "alh": "alh",
+    "llib": "llib",
+    "slib": "slib",
+    "sc": "sc",
+    "hg": "hg",
+    "hh": "hh",
+    "hib": "hib",
+    "kh": "kh",
+    "sh": "sh",
+    "bs3": "bs3",
+    "mh": "mh",
+    "hslh": "hslh",
+    "ns1": "ns1",
+    "ns2": "ns2",
+    "rh": "rh",
+    "frh": "frh",
+    "mstb": "mstb",
+    "pscb": "pscb",
+    "pslh": "pslh",
+    "pcb": "pcb",
+    "crh": "crh",
+    "eh": "eh",
+    "et": "et",
+    "dbh": "dbh",
+    "ics": "ics",
+    "ics2": "ics2",
+    "elh": "elh",
+    "mde": "mde",
+    "rec": "rec",
+    "elf": "elf",
+    "ect": "ect",
+    "airb": "airb",
+    "iseb": "iseb",
+    "ssl": "ssl",
+    "sst": "sst",
+    "ssh": "ssh",
+    "sspa": "sspa",
+    "sspb": "sspb",
+    "sslh": "sslh",
+    "sstr": "sstr",
+    "se": "se",
+    "se2": "se2",
+    "sbsg": "sbsg",
+    "sb1": "sb1",
+    "sb2": "sb2",
+    "educ": "educ",
+    "law": "law",
+    "mpaa": "mpaa",
+    "uea": "uea",
+    "unexa": "uea",
+    "act": "act",
+    "cac": "cac",
+    "aitr": "aitr",
+    "art": "art",
+    "dra": "dra",
+    "ctt": "ctt",
+    "ds": "ds",
+    "scs": "scs",
+    "mm": "mm",
+    "mab": "mab",
+    "mob": "mob",
+    "pstu": "pstu",
+    "stu4": "stu4",
+    "wsh": "wsh",
+    "hicf": "hicf",
+    "hrh": "hrh",
+    "hhcr": "hrh",
+    "gnrf": "gnrf",
+    "ph": "ph",
+    "iab": "iab",
+    "cohs": "cohs",
+    "uci": "uci"
+  },
+  "roomOverrides": {
+    "uci-barn": "uci-barn",
+    "uci-mc": "uci-mc"
+  }
+}

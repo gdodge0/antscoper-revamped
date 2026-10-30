@@ -1,0 +1,476 @@
+{
+  "cd": {
+    "code": "cd",
+    "name": "Child Development School"
+  },
+  "bs3": {
+    "code": "bs3",
+    "name": "Biological Sciences III",
+    "angle": 273,
+    "radius": 39
+  },
+  "eg": {
+    "code": "eg",
+    "name": "Engineering Gateway"
+  },
+  "mpaa": {
+    "code": "mpaa",
+    "name": "Multipurpose Academic & Administrative Building"
+  },
+  "mstb": {
+    "code": "mstb",
+    "name": "Multipurpose Science & Technology Bldg",
+    "angle": 190,
+    "radius": 29
+  },
+  "sst": {
+    "code": "sst",
+    "name": "Social Science Tower",
+    "angle": 28,
+    "radius": 37
+  },
+  "brl": {
+    "code": "brl",
+    "name": "Bonney Research Laboratory"
+  },
+  "bli": {
+    "code": "bli",
+    "name": "Beckman Laser Institute"
+  },
+  "dra": {
+    "code": "dra",
+    "name": "Drama Building"
+  },
+  "hicf": {
+    "code": "hicf",
+    "name": "Humanities Interim Classroom Facility / Studio Art Trailer"
+  },
+  "aitr": {
+    "code": "aitr",
+    "name": "Arts Instruction & Technology Resource Center"
+  },
+  "act": {
+    "code": "act",
+    "name": "Service Lot"
+  },
+  "cac": {
+    "code": "cac",
+    "name": "Contemporary Arts Center",
+    "angle": 298,
+    "radius": 45
+  },
+  "art": {
+    "code": "art",
+    "name": "Art Studio"
+  },
+  "aran": {
+    "code": "aran",
+    "name": "Arts Annex"
+  },
+  "scs": {
+    "code": "scs",
+    "name": "Sculpture / Ceramic Studios / Nixon Theatre"
+  },
+  "mm": {
+    "code": "mm",
+    "name": "Music & Media Bldg",
+    "angle": 310,
+    "radius": 37
+  },
+  "mab": {
+    "code": "mab",
+    "name": "Mesa Arts Building"
+  },
+  "stu4": {
+    "code": "stu4",
+    "name": "Studio Four"
+  },
+  "sh": {
+    "code": "sh",
+    "name": "Steinhaus Hall",
+    "angle": 263,
+    "radius": 30
+  },
+  "pstu": {
+    "code": "pstu",
+    "name": "William J. Gillespie Performance Studios"
+  },
+  "wsh": {
+    "code": "wsh",
+    "name": "Winifred Smith Hall"
+  },
+  "hslh": {
+    "code": "hslh",
+    "name": "Howard Schneiderman Lecture Hall"
+  },
+  "mh": {
+    "code": "mh",
+    "name": "McGaugh Hall"
+  },
+  "eh": {
+    "code": "eh",
+    "name": "Engineering Hall",
+    "angle": 132,
+    "radius": 41
+  },
+  "et": {
+    "code": "et",
+    "name": "Engineering Tower",
+    "angle": 121,
+    "radius": 34
+  },
+  "ect": {
+    "code": "ect",
+    "name": "Engineering & Computing Trailer"
+  },
+  "elh": {
+    "code": "elh",
+    "name": "Engineering Lecture Hall",
+    "angle": 110,
+    "radius": 27
+  },
+  "educ": {
+    "code": "educ",
+    "name": "Education",
+    "angle": 354,
+    "radius": 46
+  },
+  "sb2": {
+    "code": "sb2",
+    "name": "School of Business II",
+    "angle": 68,
+    "radius": 42
+  },
+  "icf": {
+    "code": "icf",
+    "name": "Interim Classroom Facility"
+  },
+  "mde": {
+    "code": "mde",
+    "name": "McDonnell Douglas Engineering Auditorium"
+  },
+  "rec": {
+    "code": "rec",
+    "name": "Rockwell Engineering Center"
+  },
+  "kh": {
+    "code": "kh",
+    "name": "Krieger Hall",
+    "angle": 240,
+    "radius": 28
+  },
+  "dbh": {
+    "code": "dbh",
+    "name": "Donald Bren Hall",
+    "angle": 97,
+    "radius": 38
+  },
+  "ics2": {
+    "code": "ics2",
+    "name": "Information & Computer Science 2"
+  },
+  "law": {
+    "code": "law",
+    "name": "Law Building"
+  },
+  "bh": {
+    "code": "bh",
+    "name": "Berk Hall"
+  },
+  "ms2": {
+    "code": "ms2",
+    "name": "Medical Surge II"
+  },
+  "ms1": {
+    "code": "ms1",
+    "name": "Medical Surge I"
+  },
+  "ns2": {
+    "code": "ns2",
+    "name": "Natural Sciences II",
+    "angle": 285,
+    "radius": 28
+  },
+  "pslh": {
+    "code": "pslh",
+    "name": "Physical Sciences Lecture Hall"
+  },
+  "pscb": {
+    "code": "pscb",
+    "name": "Physical Sciences Classroom Bldg",
+    "angle": 152,
+    "radius": 37
+  },
+  "pcb": {
+    "code": "pcb",
+    "name": "Parkview Classroom Bldg",
+    "angle": 322,
+    "radius": 47
+  },
+  "ns1": {
+    "code": "ns1",
+    "name": "Natural Sciences I",
+    "angle": 252,
+    "radius": 39
+  },
+  "crh": {
+    "code": "crh",
+    "name": "Croul Hall"
+  },
+  "se2": {
+    "code": "se2",
+    "name": "Social Ecology II",
+    "angle": 50,
+    "radius": 37
+  },
+  "sspb": {
+    "code": "sspb",
+    "name": "Social Science Plaza B"
+  },
+  "sslh": {
+    "code": "sslh",
+    "name": "Social Science Lecture Hall",
+    "angle": 24,
+    "radius": 26
+  },
+  "ssl": {
+    "code": "ssl",
+    "name": "Social Science Lab",
+    "angle": 15,
+    "radius": 31
+  },
+  "ssh": {
+    "code": "ssh",
+    "name": "Social Science Hall"
+  },
+  "sstr": {
+    "code": "sstr",
+    "name": "Social Science Trailer"
+  },
+  "qrl": {
+    "code": "qrl",
+    "name": "Qureshey Research Laboratory"
+  },
+  "rh": {
+    "code": "rh",
+    "name": "Rowland Hall",
+    "angle": 162,
+    "radius": 29
+  },
+  "cnlma": {
+    "code": "cnlma",
+    "name": "Center for the Neurobiology of Learning & Memory Annex"
+  },
+  "elf": {
+    "code": "elf",
+    "name": "Engineering Laboratory Facility"
+  },
+  "hg": {
+    "code": "hg",
+    "name": "Humanities Gateway",
+    "angle": 204,
+    "radius": 39
+  },
+  "gnrf": {
+    "code": "gnrf",
+    "name": "Gillespie Neuroscience Research Facility"
+  },
+  "sph": {
+    "code": "sph",
+    "name": "Sprague Hall"
+  },
+  "hib": {
+    "code": "hib",
+    "name": "Humanities Instructional Bldg",
+    "angle": 229,
+    "radius": 38
+  },
+  "sbsg": {
+    "code": "sbsg",
+    "name": "Social & Behavioral Sciences Gateway",
+    "angle": 40,
+    "radius": 30
+  },
+  "ctt": {
+    "code": "ctt",
+    "name": "Claire Trevor Theatre"
+  },
+  "hh": {
+    "code": "hh",
+    "name": "Humanities Hall",
+    "angle": 215,
+    "radius": 30
+  },
+  "ih": {
+    "code": "ih",
+    "name": "Irvine Hall"
+  },
+  "ics": {
+    "code": "ics",
+    "name": "Information & Computer Science",
+    "angle": 86,
+    "radius": 30
+  },
+  "arc": {
+    "code": "arc",
+    "name": "Anteater Recreation Center Lot"
+  },
+  "frh": {
+    "code": "frh",
+    "name": "Frederick Reines Hall",
+    "angle": 174,
+    "radius": 37
+  },
+  "sb1": {
+    "code": "sb1",
+    "name": "School of Business I",
+    "angle": 58,
+    "radius": 46
+  },
+  "airb": {
+    "code": "airb",
+    "name": "Anteater Instruction & Research Bldg",
+    "angle": 143,
+    "radius": 46
+  },
+  "hrh": {
+    "code": "hrh",
+    "name": "Hewitt Research Hall"
+  },
+  "sspa": {
+    "code": "sspa",
+    "name": "Social Science Plaza A",
+    "angle": 5,
+    "radius": 38
+  },
+  "mps": {
+    "code": "mps",
+    "name": "Mesa Parking Structure"
+  },
+  "aps": {
+    "code": "aps",
+    "name": "Anteater Parking Structure"
+  },
+  "ecps": {
+    "code": "ecps",
+    "name": "East Campus Parking Structure"
+  },
+  "ssps": {
+    "code": "ssps",
+    "name": "Social Science Parking Structure"
+  },
+  "scps": {
+    "code": "scps",
+    "name": "Student Center Parking Structure"
+  },
+  "ht": {
+    "code": "ht",
+    "name": "Hitachi Lot"
+  },
+  "ibt": {
+    "code": "ibt",
+    "name": "Service Lot"
+  },
+  "engineering": {
+    "code": "engineering",
+    "name": "Service Lot"
+  },
+  "cddc": {
+    "code": "cddc",
+    "name": "H.H. Chao Comprehensive Digestive Disease Center"
+  },
+  "slib": {
+    "code": "slib",
+    "name": "Science Library"
+  },
+  "gc": {
+    "code": "gc",
+    "name": "Gateway Study Center"
+  },
+  "llib": {
+    "code": "llib",
+    "name": "Langson Library"
+  },
+  "cp": {
+    "code": "cp",
+    "name": "Central Plant"
+  },
+  "dce": {
+    "code": "dce",
+    "name": "Continuing Education 1"
+  },
+  "ch": {
+    "code": "ch",
+    "name": "Crawford Hall"
+  },
+  "iab": {
+    "code": "iab",
+    "name": "Intercollegiate Athletics Building"
+  },
+  "se": {
+    "code": "se",
+    "name": "Social Ecology I"
+  },
+  "alh": {
+    "code": "alh",
+    "name": "Aldrich Hall"
+  },
+  "ah": {
+    "code": "ah",
+    "name": "Banning House"
+  },
+  "mob": {
+    "code": "mob",
+    "name": "Mesa Office Building"
+  },
+  "psb": {
+    "code": "psb",
+    "name": "Public Services"
+  },
+  "ut": {
+    "code": "ut",
+    "name": "University Tower"
+  },
+  "sc": {
+    "code": "sc",
+    "name": "Student Center"
+  },
+  "crcc": {
+    "code": "crcc",
+    "name": "Cross-Cultural Center"
+  },
+  "shc": {
+    "code": "shc",
+    "name": "Student Health Center"
+  },
+  "ss1": {
+    "code": "ss1",
+    "name": "Student Services I"
+  },
+  "ss2": {
+    "code": "ss2",
+    "name": "Student Services II"
+  },
+  "frf": {
+    "code": "frf",
+    "name": "Faculty Research Facility"
+  },
+  "apl": {
+    "code": "apl",
+    "name": "Air Pollution Labs"
+  },
+  "arbo": {
+    "code": "arbo",
+    "name": "Arboretum"
+  },
+  "calit2": {
+    "code": "calit2",
+    "name": "California Institute for Telecommunications and Information Technology"
+  },
+  "alp": {
+    "code": "alp",
+    "name": "Anteater Learning Pavilion",
+    "angle": 342,
+    "radius": 33
+  }
+}

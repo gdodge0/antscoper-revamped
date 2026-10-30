@@ -1,0 +1,42 @@
+services:
+  data-init:
+    build:
+      context: .
+      dockerfile: deploy/worker.Dockerfile
+    user: "0:0"
+    command: ["init"]
+    volumes:
+      - schedule-data:/var/lib/antscoper
+    restart: "no"
+    healthcheck:
+      disable: true
+  worker:
+    build:
+      context: .
+      dockerfile: deploy/worker.Dockerfile
+    environment:
+      ANTEATER_API_KEY: ${ANTEATER_API_KEY:-}
+      SCHEDULE_TERMS: ${SCHEDULE_TERMS:-}
+    volumes:
+      - schedule-data:/var/lib/antscoper
+    depends_on:
+      data-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    stop_grace_period: 45s
+  web:
+    build:
+      context: .
+      dockerfile: deploy/frontend.Dockerfile
+      args:
+        SOURCE_COMMIT: ${SOURCE_COMMIT:-unknown}
+    expose:
+      - "8080"
+    volumes:
+      - schedule-data:/var/lib/antscoper:ro
+    depends_on:
+      data-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+volumes:
+  schedule-data:
