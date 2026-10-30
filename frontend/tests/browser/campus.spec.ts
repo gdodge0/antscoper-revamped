@@ -221,7 +221,7 @@ async function mobileSheet(page: Page) {
   return { app, panel, handle, cdp, state, swipe };
 }
 
-test("mobile sheet swipes and taps can always return to the split view", async ({
+test("mobile sheet swipes move one stop for short and long distances", async ({
   page,
 }, info) => {
   test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
@@ -238,6 +238,17 @@ test("mobile sheet swipes and taps can always return to the split view", async (
       await swipe(distance);
       await state("half");
     }
+  } finally {
+    await cdp.detach();
+  }
+});
+
+test("mobile sheet header drags return to the split view", async ({
+  page,
+}, info) => {
+  test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
+  const { swipe, state, cdp } = await mobileSheet(page);
+  try {
     // The whole header can be grabbed without aiming at the small visual handle.
     for (const surface of ["clock", "range", "left", "right"] as const) {
       await swipe(-40, 0, false, surface);
@@ -245,6 +256,17 @@ test("mobile sheet swipes and taps can always return to the split view", async (
       await swipe(40, 0, false, surface);
       await state("half");
     }
+  } finally {
+    await cdp.detach();
+  }
+});
+
+test("mobile sheet summary supports drag and tap recovery", async ({
+  page,
+}, info) => {
+  test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
+  const { swipe, state, cdp } = await mobileSheet(page);
+  try {
     await swipe(40);
     await state("collapsed");
     await swipe(-40, 0, false, "summary");
@@ -561,6 +583,13 @@ test("WebGL loss has a local fallback, retry and usable lightweight map", async 
   await expect(
     page.locator('.iso-stage[data-ready="true"] canvas'),
   ).toBeVisible({ timeout: 15000 });
+  await expect(page.locator(".iso-stage canvas")).toHaveCount(1);
+});
+
+test("lightweight map can return to the full architectural view", async ({
+  page,
+}) => {
+  await ready(page);
   await page.getByRole("button", { name: "Lightweight map ↗" }).click();
   await expect(
     page.getByRole("region", { name: "Schematic UCI campus map" }),

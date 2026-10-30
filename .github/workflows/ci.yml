@@ -61,7 +61,7 @@ jobs:
       - run: npx playwright install chromium
         if: steps.browser-cache.outputs.cache-hit != 'true'
         working-directory: frontend
-      - run: npm run test:browser:${{ matrix.suite }} -- --project=${{ matrix.viewport }}
+      - run: npm run test:browser:${{ matrix.suite }} -- --project=${{ matrix.viewport }} --workers=${{ matrix.suite == 'campus' && 1 || 2 }}
         working-directory: frontend
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure()
