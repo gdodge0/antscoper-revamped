@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import subprocess
 import time
+import traceback
 import urllib.error
 import urllib.request
 import uuid
@@ -23,7 +24,10 @@ def main():
     prefix = 'antscoper-smoke-' + uuid.uuid4().hex[:8]
     volume, web, worker = prefix + '-data', prefix + '-web', prefix + '-worker'
     def run(*parts, input=None):
-        return subprocess.run([args.engine, *parts], input=input, text=True, capture_output=True, check=True).stdout.strip()
+        result = subprocess.run([args.engine, *parts], input=input, text=True, capture_output=True)
+        if result.returncode:
+            raise RuntimeError(f'{args.engine} {parts[0]} failed: {result.stderr.strip()} {result.stdout.strip()}')
+        return result.stdout.strip()
     def seed(data):
         code = "from worker.__main__ import Store,atomic; import json,sys; from datetime import datetime,timezone; from zoneinfo import ZoneInfo; s=Store('/var/lib/antscoper'); d=json.load(sys.stdin); now=datetime.now(timezone.utc); s.publish(d,{},now); s.status({'lastAttempt':now.isoformat(),'lastSuccess':now.isoformat(),'completedDate':now.astimezone(ZoneInfo('America/Los_Angeles')).date().isoformat()},now)"
         run('run', '--rm', '-i', '-v', volume + ':/var/lib/antscoper', '--entrypoint', 'python', 'antscoper-test-worker', '-c', code, input=json.dumps(data))
@@ -59,7 +63,7 @@ def main():
             try:
                 run('exec', worker, 'python', '-m', 'worker', 'health')
                 break
-            except subprocess.CalledProcessError:time.sleep(0.2)
+            except RuntimeError:time.sleep(0.2)
         else:raise AssertionError('Worker heartbeat failed')
         assert run('exec', worker, 'id', '-u') == '10001'
         assert run('exec', web, 'id', '-u') == '101'
@@ -78,6 +82,14 @@ def main():
         run('exec', worker, 'python', '-m', 'worker', 'restore', '--backup', first)
         assert json.loads(get('/data/snapshot.json')[1])['metadata']['publicationId'] == data['metadata']['publicationId']
         print('Container smoke passed: unavailable state, live publication, persistence, private backups, restore, health and unprivileged users.')
+    except Exception:
+        # CI annotations keep the failure useful even without authenticated log access.
+        detail = traceback.format_exc().replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+        print('::error title=Container smoke::' + detail, flush=True)
+        for name in [web, worker]:
+            result = subprocess.run([args.engine, 'logs', '--tail', '30', name], capture_output=True, text=True)
+            print(name, result.stdout, result.stderr, flush=True)
+        raise
     finally:
         for name in [web, worker]:
             subprocess.run([args.engine, 'rm', '-f', name], capture_output=True)
