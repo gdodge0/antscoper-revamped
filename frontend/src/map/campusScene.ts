@@ -30,6 +30,8 @@ import {
   configureTerrain,
 } from "./terrain";
 import { defaultMapSettings, type MapSettings } from "./mapSettings";
+import { bindMapInput } from "./mapInput";
+import { createCameraMotion } from "./cameraMotion";
 
 const loaders: Record<string, () => Promise<{ default: () => T.Group }>> = {
   landmarks: () => import("./models/landmarks"),
@@ -50,13 +52,17 @@ interface CampusView {
   id?: string;
   span: number;
 }
-export interface CampusViewSnapshot {
+interface CameraView {
   view: CampusView;
   target: [number, number, number];
   ground: number;
   zoom: number;
-  selected: string | null;
   navigating: boolean;
+  buildingLabels: boolean;
+}
+export interface CampusViewSnapshot extends CameraView {
+  selected: string | null;
+  previous?: CameraView;
 }
 export function createCampusScene(
   host: HTMLDivElement,
@@ -66,6 +72,7 @@ export function createCampusScene(
   onDetailState: (state: DetailState) => void,
   settings: MapSettings = defaultMapSettings,
   restore?: CampusViewSnapshot,
+  onDismiss: () => void = () => {},
 ) {
   configureTerrain(settings);
   host.dataset.ready = "false";
@@ -85,7 +92,7 @@ export function createCampusScene(
   host.prepend(renderer.domElement);
   renderer.domElement.setAttribute("aria-hidden", "true");
   const camera = new T.OrthographicCamera(-950, 950, 700, -700, 1, 8500);
-  const controls = new MapControls(camera, renderer.domElement);
+  const controls = new MapControls(camera, host);
   controls.enableRotate = false;
   controls.enableDamping = false;
   controls.minZoom = 0.4;
@@ -148,6 +155,18 @@ export function createCampusScene(
     lastSize = "",
     navigating = false;
   const baseWidth = 1900;
+  const motion = createCameraMotion(camera, controls, requestRender);
+  let previousView = restore?.previous;
+  function cameraView(): CameraView {
+    return {
+      view: { ...view },
+      target: controls.target.toArray(),
+      ground: groundHeightAt(controls.target.x, controls.target.z),
+      zoom: camera.zoom,
+      navigating,
+      buildingLabels,
+    };
+  }
   function state() {
     if (!disposed)
       onDetailState({ loading: pending.size, failed: [...failed] });
@@ -203,11 +222,17 @@ export function createCampusScene(
   function availableSpace() {
     const w = host.clientWidth,
       h = host.clientHeight;
+    const toolbar = mobile
+      ? document.querySelector(".topbar")?.getBoundingClientRect()
+      : null;
+    const top = toolbar
+      ? toolbar.bottom - host.getBoundingClientRect().top + 12
+      : 36;
     let rect = {
       x: 18,
-      y: mobile ? 36 : 125,
+      y: mobile ? top : 125,
       w: Math.max(100, w - 36),
-      h: Math.max(80, h - (mobile ? 60 : 190)),
+      h: Math.max(80, h - (mobile ? top + 24 : 190)),
     };
     const panel = document
       .querySelector(".room-detail")
@@ -238,16 +263,19 @@ export function createCampusScene(
     camera.updateProjectionMatrix();
     camera.updateMatrixWorld();
   }
-  function fit(span: number, verticalSpan = span * 0.65) {
+  function zoomForSpan(span: number, verticalSpan = span * 0.65) {
     const rect = availableSpace(),
       w = host.clientWidth || 900;
-    camera.zoom = Math.max(
+    return Math.max(
       controls.minZoom,
       Math.min(
         controls.maxZoom,
         (Math.min(rect.w / span, rect.h / verticalSpan) * baseWidth) / w,
       ),
     );
+  }
+  function fit(span: number, verticalSpan = span * 0.65) {
+    camera.zoom = zoomForSpan(span, verticalSpan);
     projectionForSpace();
   }
   function moveTarget(target: T.Vector3) {
@@ -255,7 +283,7 @@ export function createCampusScene(
     camera.position.copy(target).add(viewDirection);
     controls.update();
   }
-  function focusLocation(id: string) {
+  function focusLocation(id: string, animate = false) {
     const location = locationForCode(id);
     if (location?.status !== "verified" || !location.coordinate) return;
     const f = campusFeatures.filter((f) => f.locations.includes(location.id));
@@ -276,11 +304,16 @@ export function createCampusScene(
       vertical = (size.x + size.z) * 0.408 + size.y * 0.816 + 35;
     view = { kind: "building", id, span };
     navigating = false;
-    moveTarget(center);
-    fit(span, vertical);
+    if (animate || motion.active)
+      motion.to(center, zoomForSpan(span, vertical));
+    else {
+      moveTarget(center);
+      fit(span, vertical);
+    }
     requestRender();
   }
   function reset() {
+    motion.cancel();
     buildingLabels = false;
     view = { kind: "overview", span: mobile ? 1100 : 1900 };
     navigating = false;
@@ -291,16 +324,20 @@ export function createCampusScene(
     requestRender();
   }
   function focusDistrict(id: string) {
+    motion.cancel();
     const district = districts.find((d) => d.id === id);
     if (!district) return;
     const [x, z] = project(district.coordinate);
     view = { kind: "district", id, span: district.span };
     navigating = false;
-    moveTarget(new T.Vector3(x, groundHeightAt(x, z) + 10, z));
-    fit(district.span, district.span * 0.75);
+    motion.to(
+      new T.Vector3(x, groundHeightAt(x, z) + 10, z),
+      zoomForSpan(district.span, district.span * 0.75),
+    );
     requestRender();
   }
   function focusBridge(id: string) {
+    motion.cancel();
     const bridge = campusBridges.find((b) => b.id === id);
     if (!bridge) return;
     const box = new T.Box3();
@@ -330,7 +367,7 @@ export function createCampusScene(
       ...host.parentElement!.querySelectorAll(
         ".iso-heading,.iso-controls,.iso-footer,.campus-district-menu",
       ),
-      ...document.querySelectorAll(".room-detail"),
+      ...document.querySelectorAll(".room-detail, .topbar"),
     ].map((e) => e.getBoundingClientRect());
     const occupied: { x: number; y: number; width: number; height: number }[] =
       [];
@@ -418,8 +455,10 @@ export function createCampusScene(
   }
   function render() {
     frame = 0;
+    if (disposed) return;
+    // Finish camera restoration even while search or room details cover the map.
+    motion.step();
     if (
-      disposed ||
       !host.clientWidth ||
       !host.clientHeight ||
       getComputedStyle(host).visibility === "hidden"
@@ -486,6 +525,8 @@ export function createCampusScene(
     host.dataset.loaded = [...detail.keys()].join(",");
     host.dataset.selected = selected || "";
     host.dataset.zoom = String(camera.zoom);
+    host.dataset.target = JSON.stringify(controls.target.toArray());
+    host.dataset.animating = String(motion.active);
     positionLabels(ppm);
   }
   function requestRender() {
@@ -528,28 +569,7 @@ export function createCampusScene(
       attributes: true,
       attributeFilter: ["class"],
     });
-  let start: { x: number; y: number } | null = null;
-  const pointers = new Set<number>();
-  const down = (e: PointerEvent) => {
-    pointers.add(e.pointerId);
-    start =
-      pointers.size === 1 && e.button === 0
-        ? { x: e.clientX, y: e.clientY }
-        : null;
-  };
-  const move = (e: PointerEvent) => {
-    if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 6) {
-      start = null;
-      navigating = true;
-    }
-  };
-  const up = (e: PointerEvent) => {
-    pointers.delete(e.pointerId);
-    if (!start || pointers.size) {
-      start = null;
-      return;
-    }
-    start = null;
+  const tap = (e: PointerEvent) => {
     const box = renderer.domElement.getBoundingClientRect();
     pointer.set(
       ((e.clientX - box.left) / box.width) * 2 - 1,
@@ -566,35 +586,37 @@ export function createCampusScene(
       .intersectObjects(targets, true)
       .filter((hit) => hit.object.visible);
     const hit = hits[0];
-    if (!hit?.face) return;
-    const id = (hit.object as T.Mesh).geometry
-      .getAttribute("buildingId")
-      ?.getX(hit.face.a);
+    const id =
+      hit?.face &&
+      (hit.object as T.Mesh).geometry
+        .getAttribute("buildingId")
+        ?.getX(hit.face.a);
     if (id) {
       const location = locationForHit(id, hit.point.x, hit.point.z);
-      if (location) onPick(location.id);
+      if (location) {
+        onPick(location.id);
+        return;
+      }
     }
+    onDismiss();
   };
-  const cancel = (e: PointerEvent) => {
-    pointers.delete(e.pointerId);
-    start = null;
-  };
-  const wheel = () => {
-    navigating = true;
-  };
+  const unbindInput = bindMapInput(
+    host,
+    tap,
+    () => {
+      navigating = true;
+    },
+    () => motion.cancel(),
+  );
   const lost = (e: Event) => {
     e.preventDefault();
     onError();
   };
-  renderer.domElement.addEventListener("pointerdown", down);
-  renderer.domElement.addEventListener("pointermove", move);
-  renderer.domElement.addEventListener("pointerup", up);
-  renderer.domElement.addEventListener("pointercancel", cancel);
-  renderer.domElement.addEventListener("wheel", wheel, { passive: true });
   renderer.domElement.addEventListener("webglcontextlost", lost);
   if (restore) {
     view = { ...restore.view };
     selected = restore.selected;
+    buildingLabels = restore.buildingLabels;
     navigating = true;
     const target = new T.Vector3(...restore.target);
     target.y += groundHeightAt(target.x, target.z) - restore.ground;
@@ -602,6 +624,8 @@ export function createCampusScene(
     camera.zoom = restore.zoom;
     resize();
     navigating = restore.navigating;
+    if (!navigating && view.kind === "building" && view.id)
+      focusLocation(view.id);
   } else {
     reset();
     resize();
@@ -631,12 +655,9 @@ export function createCampusScene(
     },
     snapshot(): CampusViewSnapshot {
       return {
-        view: { ...view },
-        target: controls.target.toArray(),
-        ground: groundHeightAt(controls.target.x, controls.target.z),
-        zoom: camera.zoom,
+        ...cameraView(),
         selected,
-        navigating,
+        previous: previousView,
       };
     },
     redraw: requestRender,
@@ -646,6 +667,7 @@ export function createCampusScene(
       window.location.reload();
     },
     zoom(factor: number) {
+      motion.cancel();
       navigating = true;
       camera.zoom = Math.max(
         controls.minZoom,
@@ -654,6 +676,7 @@ export function createCampusScene(
       requestRender();
     },
     pan(x: number, z: number) {
+      motion.cancel();
       navigating = true;
       const v = new T.Vector3(
         (x * 12) / camera.zoom,
@@ -665,10 +688,24 @@ export function createCampusScene(
       controls.update();
       requestRender();
     },
-    select(id: string | null) {
+    select(id: string | null, animate = true) {
       const changed = selected !== id;
+      if (changed && id && !selected) previousView = cameraView();
       selected = id;
-      if (changed && id) focusLocation(id);
+      if (changed && id) focusLocation(id, animate);
+      else if (changed && previousView) {
+        const previous = previousView;
+        previousView = undefined;
+        view = { ...previous.view };
+        // Preserve the exact preselection camera through the sheet resize.
+        navigating = true;
+        const target = new T.Vector3(...previous.target);
+        target.y += groundHeightAt(target.x, target.z) - previous.ground;
+        motion.to(target, previous.zoom, () => {
+          navigating = previous.navigating;
+          buildingLabels = previous.buildingLabels;
+        });
+      }
       requestRender();
     },
     dispose() {
@@ -677,11 +714,7 @@ export function createCampusScene(
       observer.disconnect();
       layoutObserver.disconnect();
       controls.dispose();
-      renderer.domElement.removeEventListener("pointerdown", down);
-      renderer.domElement.removeEventListener("pointermove", move);
-      renderer.domElement.removeEventListener("pointerup", up);
-      renderer.domElement.removeEventListener("pointercancel", cancel);
-      renderer.domElement.removeEventListener("wheel", wheel);
+      unbindInput();
       renderer.domElement.removeEventListener("webglcontextlost", lost);
       disposeGroup(scene);
       sun.shadow.dispose();

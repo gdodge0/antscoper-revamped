@@ -1176,7 +1176,7 @@ kbd {
     padding: 0 var(--sheet-gutter) env(safe-area-inset-bottom);
     box-shadow: var(--shadow-lg);
     border-radius: 4px 4px 0 0;
-    transition: top 0.2s ease;
+    transition: top 0.28s ease;
   }
   .sheet-handle {
     display: flex;
@@ -1311,7 +1311,7 @@ kbd {
     top: auto;
     bottom: 120px;
   }
-  .focused-panel .results-panel {
+  .is-search .results-panel {
     top: 82px;
     box-shadow: none;
     border-radius: 0;
@@ -1322,29 +1322,29 @@ kbd {
   .focused-panel .results-panel {
     padding-top: 12px;
   }
-  .focused-panel .topbar {
+  .is-search .topbar {
     left: 12px;
     right: 20px;
   }
-  .focused-panel .topbar .mobile-back {
+  .is-search .topbar .mobile-back {
     display: inline-flex;
     min-width: 32px;
     padding: 5px;
   }
-  .focused-panel .search-box {
+  .is-search .search-box {
     box-shadow: none;
     border: 1px solid var(--color-neutral-300);
     height: 46px;
     min-height: 46px;
     padding: 0 12px;
   }
-  .focused-panel .topbar nav {
+  .is-search .topbar nav {
     display: none;
   }
-  .focused-panel .workspace {
+  .is-search .workspace {
     background: var(--color-bg);
   }
-  .focused-panel .campus-map {
+  .is-search .campus-map {
     display: none;
   }
   .building-heading {
@@ -1352,7 +1352,7 @@ kbd {
     padding-bottom: 4px;
   }
   .building-heading .text-button {
-    display: none;
+    align-self: flex-start;
   }
   .building-heading h2 {
     font-size: 25px;
@@ -1555,6 +1555,7 @@ kbd {
   *:after {
     scroll-behavior: auto !important;
     transition: none !important;
+    animation: none !important;
   }
 }
 .data-stamp {

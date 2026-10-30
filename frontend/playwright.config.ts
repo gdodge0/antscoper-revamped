@@ -54,5 +54,28 @@ export default defineConfig({
       },
     },
     { name: "small-desktop", use: { viewport: { width: 1024, height: 768 } } },
+    ...(process.env.PLAYWRIGHT_FIREFOX === "1"
+      ? [
+          {
+            name: "firefox",
+            testMatch: "navigation.spec.ts",
+            use: {
+              browserName: "firefox" as const,
+              viewport: { width: 1280, height: 800 },
+              launchOptions: {},
+            },
+          },
+          {
+            name: "firefox-phone",
+            testMatch: "navigation.spec.ts",
+            use: {
+              browserName: "firefox" as const,
+              viewport: { width: 390, height: 844 },
+              hasTouch: true,
+              launchOptions: {},
+            },
+          },
+        ]
+      : []),
   ],
 });

@@ -10,7 +10,15 @@ import {
   weekday,
 } from "./dates";
 import { dataNotice, projectWeek, roomTerm } from "./schedule";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useSearchParams } from "react-router";
 import { CampusMap } from "./CampusMap";
 import { MapPreviewBoundary } from "./MapPreviewBoundary";
@@ -545,6 +553,34 @@ function Workspace({
     [searchOpen, setSearchOpen] = useState(false),
     [snap, setSnap] = useState<"half" | "full" | "collapsed">("half");
   const [storageMessage, setStorageMessage] = useState("");
+  const beforeBuilding = useRef<{
+    query: string;
+    savedOnly: boolean;
+    oneHour: boolean;
+    searchOpen: boolean;
+    snap: typeof snap;
+    scrollTop: number;
+  } | null>(null);
+  const panelContent = useRef<HTMLDivElement>(null);
+  const resultsScroll = useRef<HTMLDivElement>(null);
+  const restoreScroll = useRef<number | null>(null);
+  const shownBuilding = useRef(buildingCode);
+  useLayoutEffect(() => {
+    if (shownBuilding.current === buildingCode) return;
+    shownBuilding.current = buildingCode;
+    if (resultsScroll.current)
+      resultsScroll.current.scrollTop = restoreScroll.current ?? 0;
+    restoreScroll.current = null;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const animation = panelContent.current?.animate?.(
+      [
+        { transform: `translateY(${buildingCode ? 18 : -18}px)`, opacity: 0.5 },
+        { transform: "translateY(0)", opacity: 1 },
+      ],
+      { duration: 240, easing: "ease-out" },
+    );
+    return () => animation?.cancel();
+  }, [buildingCode]);
   const search = useRef<HTMLInputElement>(null),
     sheetGesture = useRef<{
       id: number;
@@ -553,6 +589,7 @@ function Workspace({
       tap: "toggle" | "expand" | null;
     } | null>(null),
     dragged = useRef(false),
+    sheetClickHandled = useRef(false),
     initial = useRef(false);
   const updateParams = (
     values: Record<string, string | null>,
@@ -634,12 +671,35 @@ function Workspace({
     [query, data],
   );
   const setBuilding = (code: string) => {
+    if (!buildingCode)
+      beforeBuilding.current = {
+        query,
+        savedOnly,
+        oneHour,
+        searchOpen,
+        snap,
+        scrollTop: resultsScroll.current?.scrollTop ?? 0,
+      };
     updateParams({ building: code, room: null, q: null });
+    search.current?.blur();
     setSearchOpen(false);
     setSavedOnly(false);
     setOneHour(false);
-    setSnap("full");
   };
+  const dismissBuilding = () => {
+    if (!buildingCode && !roomId) return;
+    const previous = beforeBuilding.current;
+    beforeBuilding.current = null;
+    restoreScroll.current = previous?.scrollTop ?? 0;
+    updateParams({ building: null, room: null, q: previous?.query || null });
+    setSavedOnly(previous?.savedOnly ?? savedOnly);
+    setOneHour(previous?.oneHour ?? oneHour);
+    setSearchOpen(previous?.searchOpen ?? false);
+    setSnap(previous?.snap ?? "half");
+  };
+  useEffect(() => {
+    if (!buildingCode) beforeBuilding.current = null;
+  }, [buildingCode]);
   const selectRoom = (id: string) => {
     updateParams({ room: id });
     search.current?.blur();
@@ -697,13 +757,14 @@ function Workspace({
         search.current?.focus();
       }
       if (e.key === "Escape") {
+        if (!document.querySelector("dialog[open]")) dismissBuilding();
         setSearchOpen(false);
         search.current?.blur();
       }
     }
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, []);
+  }, [buildingCode, roomId, savedOnly, oneHour]);
   useEffect(() => {
     if (initial.current) return;
     initial.current = true;
@@ -752,9 +813,12 @@ function Workspace({
       onSave={() => toggleSaved(r.id)}
     />
   );
+  // Derive the selection sheet position from the committed URL. Changing snap
+  // before navigation commits can resize the map before it saves its camera.
+  const visibleSnap = activeBuilding ? "half" : snap;
   return (
     <main
-      className={`app ${selectedRoom ? "has-room" : ""} ${activeBuilding || searchOpen || query ? "focused-panel" : ""} sheet-${snap} ${activeBuilding ? "is-building" : searchOpen || query ? "is-search" : ""}`}
+      className={`app ${selectedRoom ? "has-room" : ""} ${activeBuilding || searchOpen || query ? "focused-panel" : ""} sheet-${visibleSnap} ${activeBuilding ? "is-building" : searchOpen || query ? "is-search" : ""}`}
     >
       <a className="skip-link" href="#results">
         Skip to rooms
@@ -766,7 +830,7 @@ function Workspace({
         <button
           className="mobile-back icon-button"
           aria-label="Back to map"
-          onClick={reset}
+          onClick={activeBuilding ? dismissBuilding : reset}
         >
           <Icon name="back" />
         </button>
@@ -798,7 +862,11 @@ function Workspace({
             <button
               className="icon-button search-clear"
               aria-label="Clear search"
-              onClick={() => updateParams({ q: null, building: null })}
+              onClick={() =>
+                activeBuilding
+                  ? dismissBuilding()
+                  : updateParams({ q: null, building: null })
+              }
             >
               <Icon name="close" size={16} />
             </button>
@@ -845,13 +913,24 @@ function Workspace({
                     : (locationForCode(buildingCode)?.id ?? buildingCode)
               }
               onBuilding={setBuilding}
+              onDismiss={dismissBuilding}
             />
           </Suspense>
         </MapPreviewBoundary>
         <section
           className="results-panel"
           aria-label="Find a room"
+          onClickCapture={(e) => {
+            // A touch tap can synthesize a click after the sheet has moved,
+            // landing on a room underneath the former summary position.
+            if (sheetClickHandled.current && e.detail > 0) {
+              sheetClickHandled.current = false;
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
           onPointerDown={(e) => {
+            sheetClickHandled.current = false;
             if (
               !e.isPrimary ||
               e.button !== 0 ||
@@ -883,6 +962,7 @@ function Workspace({
                     ? "expand"
                     : null,
             };
+            sheetClickHandled.current = true;
             dragged.current = false;
             e.currentTarget.setPointerCapture(e.pointerId);
           }}
@@ -934,13 +1014,13 @@ function Workspace({
             className="sheet-handle"
             data-sheet-drag="toggle"
             aria-label={
-              snap === "collapsed"
+              visibleSnap === "collapsed"
                 ? "Expand room list"
-                : snap === "full"
+                : visibleSnap === "full"
                   ? "Show map and room list"
                   : "Collapse room list"
             }
-            aria-expanded={snap !== "collapsed"}
+            aria-expanded={visibleSnap !== "collapsed"}
             onClick={(e) => {
               // Pointer taps are handled on release: browsers can suppress the
               // synthesized click after a swipe. Keep click for keyboard/AT use.
@@ -955,7 +1035,7 @@ function Workspace({
           <div
             className="collapsed-summary"
             data-sheet-drag="expand"
-            aria-hidden={snap !== "collapsed"}
+            aria-hidden={visibleSnap !== "collapsed"}
             onClick={(e) => {
               if (e.detail === 0) setSnap("half");
             }}
@@ -970,7 +1050,7 @@ function Workspace({
             </span>
             <span className="tag">{preview ? "Preview" : "Now"}</span>
           </div>
-          <div className="panel-content">
+          <div className="panel-content" ref={panelContent}>
             <button
               className="data-stamp eyebrow"
               onClick={() => setAbout(true)}
@@ -980,7 +1060,7 @@ function Workspace({
             </button>
             {activeBuilding && (
               <div className="building-heading">
-                <button className="text-button" onClick={reset}>
+                <button className="text-button" onClick={dismissBuilding}>
                   <Icon name="back" size={16} />
                   All rooms
                 </button>
@@ -1098,7 +1178,12 @@ function Workspace({
                 Saved
               </button>
             </div>
-            <div className="results-scroll" id="results" tabIndex={-1}>
+            <div
+              className="results-scroll"
+              id="results"
+              tabIndex={-1}
+              ref={resultsScroll}
+            >
               {query && matchingBuildings.length > 0 && (
                 <div className="building-results">
                   <span className="eyebrow">

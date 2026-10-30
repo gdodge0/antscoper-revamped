@@ -5,6 +5,8 @@
   position: absolute;
   inset: 0;
   outline-offset: -3px;
+  touch-action: none;
+  user-select: none;
 }
 .iso-stage canvas {
   width: 100%;
@@ -62,7 +64,11 @@
   border-radius: 2px;
 }
 .iso-label[hidden] {
-  display: none;
+  /* Keep real dimensions for collision checks, including while hidden. A
+     fallback width can alternate between "fits" and "blocked" every frame. */
+  display: flex;
+  visibility: hidden;
+  pointer-events: none;
 }
 .iso-label:before {
   content: "";
@@ -477,7 +483,7 @@
     right: 12px;
   }
   .iso-stage {
-    top: var(--mobile-map-top);
+    top: 0;
     bottom: 62dvh;
     height: auto;
   }
@@ -539,9 +545,9 @@
     bottom: 140px;
     left: 20px;
   }
-  .focused-panel .iso-heading,
-  .focused-panel .iso-footer,
-  .focused-panel .iso-controls {
+  .is-search .iso-heading,
+  .is-search .iso-footer,
+  .is-search .iso-controls {
     display: none;
   }
 }

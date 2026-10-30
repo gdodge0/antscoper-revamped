@@ -40,9 +40,12 @@ test("availability badges and building selection use the existing schedule", asy
   page,
 }, info) => {
   await ready(page);
+  const stage = page.locator(".iso-stage");
+  await expect(stage).toHaveAttribute("data-outline-draw-calls", "0");
   const alp = page.getByRole("button", {
     name: "Anteater Learning Pavilion: 2 rooms free",
     exact: true,
+    includeHidden: true,
   });
   await expect(alp).toBeVisible();
   await alp.click();
@@ -52,21 +55,22 @@ test("availability badges and building selection use the existing schedule", asy
     "Anteater Learning Pavilion",
   );
   await expect(page.locator(".room-select").first()).toBeVisible();
-  // Selection adds a depth-tested silhouette pass; keep its total GPU work
-  // inside the same budget and capture it for visual inspection.
+  await expect(alp).toHaveAttribute("aria-pressed", "true");
+  // Measure the silhouette pass directly: camera framing and viewport size
+  // change the total number of visible meshes (and therefore draw calls).
   await expect
     .poll(async () =>
-      Number(await page.locator(".iso-stage").getAttribute("data-draw-calls")),
+      Number(await stage.getAttribute("data-outline-draw-calls")),
     )
-    .toBeGreaterThan(60);
-  expect(
-    Number(await page.locator(".iso-stage").getAttribute("data-draw-calls")),
-  ).toBeLessThan(150);
-  expect(
-    Number(await page.locator(".iso-stage").getAttribute("data-triangles")),
-  ).toBeLessThan(150000);
-  if (page.viewportSize()!.width >= 1024)
-    await page.screenshot({ path: info.outputPath("alp-selected.png") });
+    .toBeGreaterThan(0);
+  await expect(stage).toHaveAttribute("data-animating", "false");
+  expect(Number(await stage.getAttribute("data-draw-calls"))).toBeLessThan(150);
+  expect(Number(await stage.getAttribute("data-triangles"))).toBeLessThan(
+    150000,
+  );
+  await page.screenshot({ path: info.outputPath("alp-selected.png") });
+  await page.getByRole("button", { name: "All rooms", exact: true }).click();
+  await expect(stage).toHaveAttribute("data-outline-draw-calls", "0");
   await page.goto("/?map=alp");
   await page.locator(".iso-stage[data-ready]").waitFor();
   await page.getByRole("slider").focus();

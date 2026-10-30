@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:browser": "playwright test",
-    "test:browser:campus": "playwright test campus.spec.ts terrain.spec.ts map-settings.spec.ts",
+    "test:browser:navigation": "playwright test navigation.spec.ts",
+    "test:browser:campus": "playwright test campus.spec.ts terrain.spec.ts map-settings.spec.ts navigation.spec.ts",
     "test:browser:journeys": "playwright test dates.spec.ts gestures.spec.ts map.spec.ts ui.spec.ts"
   },
   "dependencies": {
