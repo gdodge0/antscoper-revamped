@@ -37,6 +37,7 @@ export default function FullCampusMap({
     [detail, setDetail] = useState<DetailState>({ loading: 0, failed: [] }),
     [district, setDistrict] = useState("");
   const [params, setParams] = useSearchParams();
+  const headerPreview = params.get("preview") === "map-header";
   const counts = useMemo(
     () =>
       Object.fromEntries(
@@ -126,35 +127,51 @@ export default function FullCampusMap({
     if (id) api.current?.focusDistrict(id);
     else api.current?.reset();
   }
+  const districtMenu = (
+    <div className="campus-district-menu">
+      <label htmlFor="campus-district">Explore</label>
+      <select
+        id="campus-district"
+        aria-label="Explore a campus district"
+        value={district}
+        disabled={failed}
+        onChange={(e) => goDistrict(e.target.value)}
+      >
+        <option value="">All campus</option>
+        {districts.map((d) => (
+          <option key={d.id} value={d.id}>
+            {d.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
   return (
     <section
-      className="campus-map iso-map full-campus-map"
+      className={`campus-map iso-map full-campus-map${headerPreview ? " is-header-preview" : ""}`}
       aria-label="Isometric UCI campus map"
     >
-      <div className="iso-heading">
-        <span className="eyebrow">University of California, Irvine</span>
-        <h2>
-          A little room on campus<span>UCI</span>
-        </h2>
+      <div className={`iso-heading${headerPreview ? " map-intro-panel" : ""}`}>
+        {headerPreview ? (
+          <>
+            <div className="map-intro-topline">
+              <span className="eyebrow">University of California, Irvine</span>
+              <span className="map-intro-mark">UCI</span>
+            </div>
+            <h2>A little room on campus</h2>
+          </>
+        ) : (
+          <>
+            <span className="eyebrow">University of California, Irvine</span>
+            <h2>
+              A little room on campus<span>UCI</span>
+            </h2>
+          </>
+        )}
         <p>Explore a district. Find your next quiet corner.</p>
+        {headerPreview && districtMenu}
       </div>
-      <div className="campus-district-menu">
-        <label htmlFor="campus-district">Explore</label>
-        <select
-          id="campus-district"
-          aria-label="Explore a campus district"
-          value={district}
-          disabled={failed}
-          onChange={(e) => goDistrict(e.target.value)}
-        >
-          <option value="">All campus</option>
-          {districts.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      {!headerPreview && districtMenu}
       <div
         className="iso-stage"
         ref={host}
