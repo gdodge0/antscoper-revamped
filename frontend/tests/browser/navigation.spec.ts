@@ -47,6 +47,21 @@ async function settled(page: Page) {
   await expect(stageOf(page)).toHaveAttribute("data-animating", "false");
 }
 
+async function pauseAnimationClock(page: Page) {
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 60000));
+}
+
+async function sampleCameraMotion(page: Page) {
+  // Sample the first frame, midpoint, and end without depending on the CI
+  // renderer producing a minimum frame rate during the 380 ms transition.
+  const samples = [];
+  for (const milliseconds of [16, 164, 220]) {
+    await page.clock.fastForward(milliseconds);
+    samples.push(await camera(page));
+  }
+  return samples;
+}
+
 async function blankMapClick(page: Page) {
   const box = (await stageOf(page).boundingBox())!;
   // The wide tablet crop includes IAB at the left midpoint; use the open ground
@@ -59,33 +74,31 @@ for (const reducedMotion of [false, true]) {
   test(`building groups ${reducedMotion ? "respect reduced motion" : "animate into view"} without selecting a building or animating back`, async ({
     page,
   }, info) => {
+    await page.clock.install();
     await page.emulateMedia({
       reducedMotion: reducedMotion ? "reduce" : "no-preference",
     });
     await ready(page);
+    await pauseAnimationClock(page);
     const before = await camera(page);
     const url = page.url();
-    await stageOf(page).evaluate((el) => {
-      (window as any).groupZooms = [];
-      new MutationObserver(() =>
-        (window as any).groupZooms.push(
-          Number((el as HTMLElement).dataset.zoom),
-        ),
-      ).observe(el, { attributes: true, attributeFilter: ["data-zoom"] });
-    });
     if (reducedMotion && !mobile(page))
       await page
         .getByRole("combobox", { name: "Explore a campus district" })
         .selectOption("humanities");
     else await page.locator(".district-label:not([hidden])").first().click();
+    const [first, middle, focused] = await sampleCameraMotion(page);
     await expect(stageOf(page)).toHaveAttribute("data-view", "district");
     await settled(page);
-    const focused = await camera(page);
     expect(focused.zoom).toBeGreaterThan(before.zoom);
-    const steps = new Set(await page.evaluate(() => (window as any).groupZooms))
-      .size;
-    if (reducedMotion) expect(steps).toBe(1);
-    else expect(steps).toBeGreaterThan(2);
+    if (reducedMotion) {
+      expect(first).toEqual(focused);
+      expect(middle).toEqual(focused);
+    } else {
+      expect(first.zoom).toBeGreaterThan(before.zoom);
+      expect(middle.zoom).toBeGreaterThan(first.zoom);
+      expect(focused.zoom).toBeGreaterThan(middle.zoom);
+    }
     await expect(page).toHaveURL(url);
     await expect(page.locator('.iso-label[aria-pressed="true"]')).toHaveCount(
       0,
@@ -96,7 +109,7 @@ for (const reducedMotion of [false, true]) {
     await stageOf(page).focus();
     await page.keyboard.press("Escape");
     await expect(stageOf(page)).toHaveAttribute("data-animating", "false");
-    await page.waitForTimeout(450);
+    await page.clock.fastForward(450);
     expect(await camera(page)).toEqual(focused);
     await expect(page).toHaveURL(url);
     await page.screenshot({ path: info.outputPath("building-group.png") });
@@ -108,32 +121,29 @@ test("click away clears the permalink and animates back to the previous map and 
 }, info) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
+  await page.clock.install();
   await ready(page);
   const label = await buildingLabel(page);
+  await pauseAnimationClock(page);
   const before = await camera(page);
-  await stageOf(page).evaluate((el) => {
-    (window as any).cameraZooms = [];
-    new MutationObserver(() =>
-      (window as any).cameraZooms.push(
-        Number((el as HTMLElement).dataset.zoom),
-      ),
-    ).observe(el, { attributes: true, attributeFilter: ["data-zoom"] });
-  });
   await label.click();
   await expect(page).toHaveURL(/building=/);
   await expect(page.locator(".building-heading")).toBeVisible();
+  const [first, middle, selected] = await sampleCameraMotion(page);
   await settled(page);
-  expect((await camera(page)).zoom).toBeGreaterThan(before.zoom);
-  expect(
-    new Set(await page.evaluate(() => (window as any).cameraZooms)).size,
-  ).toBeGreaterThan(2);
+  expect(first.zoom).toBeGreaterThan(before.zoom);
+  expect(middle.zoom).toBeGreaterThan(first.zoom);
+  expect(selected.zoom).toBeGreaterThan(middle.zoom);
   await page.screenshot({ path: info.outputPath("building-selected.png") });
   await blankMapClick(page);
   await expect(page).not.toHaveURL(/building=|room=/);
   await expect(page).toHaveURL(/date=2026-10-29/);
   await expect(page).toHaveURL(/time=14%3A15/);
+  const [returnFirst, returnMiddle, after] = await sampleCameraMotion(page);
   await settled(page);
-  const after = await camera(page);
+  expect(returnFirst.zoom).toBeLessThan(selected.zoom);
+  expect(returnMiddle.zoom).toBeLessThan(returnFirst.zoom);
+  expect(after.zoom).toBeLessThan(returnMiddle.zoom);
   expect(after.zoom).toBeCloseTo(before.zoom, 3);
   after.target.forEach((value, i) =>
     expect(value).toBeCloseTo(before.target[i], 3),
@@ -142,6 +152,7 @@ test("click away clears the permalink and animates back to the previous map and 
     await expect(page.locator(".app")).toHaveClass(/sheet-collapsed/);
   await expect(page.locator('.iso-label[aria-pressed="true"]')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("building-dismissed.png") });
+  await page.clock.resume();
   await page.reload();
   await expect(page.locator(".building-heading")).toHaveCount(0);
   expect(errors).toEqual([]);

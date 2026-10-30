@@ -9,6 +9,7 @@ import { createCameraMotion } from "./cameraMotion";
 export interface SceneStats {
   triangles: number;
   calls: number;
+  outlineCalls: number;
   frames: number;
 }
 export function createScene(
@@ -67,7 +68,12 @@ export function createScene(
     disposed = false,
     frames = 0,
     selected: string | null = null;
-  const stats: SceneStats = { triangles: 0, calls: 0, frames: 0 };
+  const stats: SceneStats = {
+    triangles: 0,
+    calls: 0,
+    outlineCalls: 0,
+    frames: 0,
+  };
   const projected = new T.Vector3();
   const motion = createCameraMotion(camera, controls, requestRender);
   let previousView: { target: T.Vector3; zoom: number } | null = null;
@@ -85,16 +91,19 @@ export function createScene(
     camera.position.add(shift);
     renderer.info.reset();
     renderer.render(scene, camera);
+    const sceneCalls = renderer.info.render.calls;
     if (selected && features.some((f) => f.code === selected))
       outline.render(renderer, scene, camera, selected);
     frames++;
     Object.assign(stats, {
       triangles: renderer.info.render.triangles,
       calls: renderer.info.render.calls,
+      outlineCalls: renderer.info.render.calls - sceneCalls,
       frames,
     });
     host.dataset.triangles = String(stats.triangles);
     host.dataset.drawCalls = String(stats.calls);
+    host.dataset.outlineDrawCalls = String(stats.outlineCalls);
     host.dataset.frames = String(frames);
     host.dataset.ready = "true";
     host.dataset.zoom = String(camera.zoom);
