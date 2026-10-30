@@ -17,6 +17,8 @@ Open **http://127.0.0.1:5173**. Run commands from this repository, the inner `an
 
 Select **Now** for the current campus date/time in `America/Los_Angeles`. Previous/next arrows move by week; each weekday includes its date. Drag the time dial or use arrow keys (15 minutes), Home and End. The mobile sheet supports map, split and room-list positions. Pinch the map or use its zoom buttons. Press `/` to search. Shared links retain the room, date and time; saved rooms persist in this browser.
 
+Selecting a building slides in its rooms and zooms the map toward it. Click or tap empty map space, choose **All rooms**, or press Escape to clear the selection from the link and return to the previous map, filters, and sheet position. Reduced-motion preferences skip the animations. On mobile, search and favorites float over the map; pinching works on building badges as well as the canvas.
+
 To develop against actual schedules instead:
 
 ```bash
@@ -55,6 +57,15 @@ npm run test:browser
 ```
 
 Headless Chromium checks cover six viewports from 320×740 to 1280×800, including dates, history, finals, shared links, every campus district, map gestures, room navigation, mobile sheet positions, keyboard controls, rendering budgets and WebGL recovery. Browser artifacts go to `test-results/browser/`. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to reuse an installed Chromium executable.
+
+Run `npm run test:browser:navigation` for selection restoration, badge stability, native multitouch, and the mobile toolbar. Firefox also checks selection, labels, and layout at desktop and phone widths:
+
+```bash
+npx playwright install firefox
+PLAYWRIGHT_FIREFOX=1 npm run test:browser:navigation -- --project=firefox --project=firefox-phone
+```
+
+Native multitouch tests use Chromium's input protocol; Firefox runs the remaining navigation checks.
 
 Container checks use temporary containers and volumes without upstream requests:
 

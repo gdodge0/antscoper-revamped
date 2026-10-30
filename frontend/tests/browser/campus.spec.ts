@@ -53,6 +53,7 @@ async function exploreDistrict(page: Page, id: string) {
         })
         .selectOption(id),
     );
+    await expect(stage).toHaveAttribute("data-animating", "false");
     return;
   }
   await renderAfter(() =>
@@ -103,6 +104,7 @@ async function exploreDistrict(page: Page, id: string) {
   }
   await expect(badge).toBeVisible();
   await renderAfter(() => badge.click());
+  await expect(stage).toHaveAttribute("data-animating", "false");
 }
 async function budget(page: Page) {
   const mobile = page.viewportSize()!.width < 1024;

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { availability, type Room } from "../model";
 import { Icon } from "../Icon";
@@ -12,18 +12,22 @@ export default function IsoCampusMap({
   time,
   selected,
   onBuilding,
+  onDismiss,
 }: {
   rooms: Room[];
   day: number;
   time: number;
   selected: string | null;
   onBuilding: (code: string) => void;
+  onDismiss: () => void;
 }) {
   const host = useRef<HTMLDivElement>(null),
     labels = useRef(new Map<string, HTMLButtonElement>()),
     api = useRef<ReturnType<typeof createScene> | null>(null);
   const pick = useRef(onBuilding);
   pick.current = onBuilding;
+  const dismiss = useRef(onDismiss);
+  dismiss.current = onDismiss;
   const [failed, setFailed] = useState(false),
     [attempt, setAttempt] = useState(0);
   const [params, setParams] = useSearchParams();
@@ -53,7 +57,9 @@ export default function IsoCampusMap({
         labels.current,
         (code) => pick.current(code),
         () => setFailed(true),
+        () => dismiss.current(),
       );
+      api.current.select(selected);
     } catch (error) {
       console.warn("Isometric map unavailable", error);
       setFailed(true);
@@ -63,7 +69,10 @@ export default function IsoCampusMap({
       api.current = null;
     };
   }, [attempt, failed]);
-  useEffect(() => api.current?.select(selected), [selected, attempt, failed]);
+  useLayoutEffect(
+    () => api.current?.select(selected),
+    [selected, attempt, failed],
+  );
   const outside = !!selected && !features.some((f) => f.code === selected);
   return (
     <section

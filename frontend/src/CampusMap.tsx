@@ -8,12 +8,14 @@ export function CampusMap({
   time,
   selected,
   onBuilding,
+  onDismiss,
 }: {
   rooms: Room[];
   day: number;
   time: number;
   selected: string | null;
   onBuilding: (code: string) => void;
+  onDismiss: () => void;
 }) {
   const [params, setParams] = useSearchParams();
   const [zoom, setZoom] = useState(1),
@@ -21,6 +23,7 @@ export function CampusMap({
   const drag = useRef<{ x: number; y: number; px: number; py: number } | null>(
     null,
   );
+  const moved = useRef(false);
   const dots = useMemo(
     () =>
       Object.values(buildings)
@@ -44,17 +47,28 @@ export function CampusMap({
         className="map-interaction"
         onPointerDown={(e) => {
           if ((e.target as HTMLElement).closest("button")) return;
+          if (!e.isPrimary || e.button !== 0) return;
+          moved.current = false;
           drag.current = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y };
           e.currentTarget.setPointerCapture(e.pointerId);
         }}
         onPointerMove={(e) => {
-          if (drag.current)
+          if (drag.current) {
+            if (
+              Math.hypot(
+                e.clientX - drag.current.x,
+                e.clientY - drag.current.y,
+              ) > 6
+            )
+              moved.current = true;
             setPan({
               x: drag.current.px + e.clientX - drag.current.x,
               y: drag.current.py + e.clientY - drag.current.y,
             });
+          }
         }}
         onPointerUp={() => {
+          if (drag.current && !moved.current) onDismiss();
           drag.current = null;
         }}
         onPointerCancel={() => {

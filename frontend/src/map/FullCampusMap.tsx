@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { availability, type Room } from "../model";
 import {
@@ -27,12 +27,14 @@ export default function FullCampusMap({
   time,
   selected,
   onBuilding,
+  onDismiss,
 }: {
   rooms: Room[];
   day: number;
   time: number;
   selected: string | null;
   onBuilding: (id: string) => void;
+  onDismiss: () => void;
 }) {
   const host = useRef<HTMLDivElement>(null),
     labels = useRef(new Map<string, HTMLElement>()),
@@ -42,6 +44,8 @@ export default function FullCampusMap({
   const [terrainSettings, setTerrainSettings] = useState(settings);
   const pick = useRef(onBuilding);
   pick.current = onBuilding;
+  const dismiss = useRef(onDismiss);
+  dismiss.current = onDismiss;
   const [failed, setFailed] = useState(false),
     [attempt, setAttempt] = useState(0),
     [detail, setDetail] = useState<DetailState>({ loading: 0, failed: [] }),
@@ -123,7 +127,9 @@ export default function FullCampusMap({
         setDetail,
         terrainSettings,
         savedView.current,
+        () => dismiss.current(),
       );
+      api.current.select(selected, false);
     } catch (error) {
       console.warn("Campus map unavailable", error);
       setFailed(true);
@@ -134,7 +140,7 @@ export default function FullCampusMap({
       api.current = null;
     };
   }, [attempt, failed, terrainSettings]);
-  useEffect(
+  useLayoutEffect(
     () => api.current?.select(selected),
     [selected, attempt, failed, terrainSettings],
   );

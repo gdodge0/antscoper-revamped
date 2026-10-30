@@ -3,6 +3,8 @@ import { MapControls } from "three/addons/controls/MapControls.js";
 import { createArchitecture, createLandscape } from "./architecture";
 import { features } from "./geography";
 import { SelectionOutline } from "./SelectionOutline";
+import { bindMapInput } from "./mapInput";
+import { createCameraMotion } from "./cameraMotion";
 
 export interface SceneStats {
   triangles: number;
@@ -14,6 +16,7 @@ export function createScene(
   labels: Map<string, HTMLButtonElement>,
   onPick: (code: string) => void,
   onError: () => void,
+  onDismiss: () => void,
 ) {
   const scene = new T.Scene();
   scene.background = new T.Color("#f3f2f2");
@@ -32,7 +35,7 @@ export function createScene(
   host.prepend(renderer.domElement);
   renderer.domElement.setAttribute("aria-hidden", "true");
   const camera = new T.OrthographicCamera(-100, 100, 100, -100, 0.1, 1600);
-  const controls = new MapControls(camera, renderer.domElement);
+  const controls = new MapControls(camera, host);
   controls.enableRotate = false;
   controls.enableDamping = false;
   controls.minZoom = 0.65;
@@ -66,10 +69,13 @@ export function createScene(
     selected: string | null = null;
   const stats: SceneStats = { triangles: 0, calls: 0, frames: 0 };
   const projected = new T.Vector3();
+  const motion = createCameraMotion(camera, controls, requestRender);
+  let previousView: { target: T.Vector3; zoom: number } | null = null;
   // Labels remain HTML controls, so both canvas and keyboard users can select buildings.
   function render() {
     frame = 0;
     if (disposed) return;
+    motion.step();
     const shift = new T.Vector3();
     shift.x =
       Math.max(-100, Math.min(110, controls.target.x)) - controls.target.x;
@@ -91,6 +97,9 @@ export function createScene(
     host.dataset.drawCalls = String(stats.calls);
     host.dataset.frames = String(frames);
     host.dataset.ready = "true";
+    host.dataset.zoom = String(camera.zoom);
+    host.dataset.target = JSON.stringify(controls.target.toArray());
+    host.dataset.animating = String(motion.active);
     const w = host.clientWidth,
       h = host.clientHeight,
       occupied: { x: number; y: number }[] = [];
@@ -99,6 +108,7 @@ export function createScene(
       ...host.parentElement!.querySelectorAll(
         ".iso-heading,.iso-controls,.iso-footer",
       ),
+      ...document.querySelectorAll(".topbar"),
     ].map((e) => e.getBoundingClientRect());
     const sorted = [...features].sort(
       (a, b) =>
@@ -151,6 +161,7 @@ export function createScene(
     requestRender();
   }
   function reset() {
+    motion.cancel();
     controls.target.set(-4, 3, -8);
     camera.position.copy(controls.target).add(new T.Vector3(-260, 260, 260));
     camera.zoom = 1;
@@ -162,16 +173,7 @@ export function createScene(
   controls.addEventListener("change", change);
   const observer = new ResizeObserver(resize);
   observer.observe(host);
-  let start: { x: number; y: number } | null = null;
-  const down = (e: PointerEvent) => {
-    start = { x: e.clientX, y: e.clientY };
-  };
-  const up = (e: PointerEvent) => {
-    if (!start || Math.hypot(e.clientX - start.x, e.clientY - start.y) > 6) {
-      start = null;
-      return;
-    }
-    start = null;
+  const tap = (e: PointerEvent) => {
     const bounds = renderer.domElement.getBoundingClientRect();
     pointer.set(
       ((e.clientX - bounds.left) / bounds.width) * 2 - 1,
@@ -180,17 +182,18 @@ export function createScene(
     raycaster.setFromCamera(pointer, camera);
     const hit = raycaster.intersectObject(architecture, true)[0];
     if (hit?.object.userData.code) onPick(hit.object.userData.code);
+    else onDismiss();
   };
-  const cancel = () => {
-    start = null;
-  };
+  const unbindInput = bindMapInput(
+    host,
+    tap,
+    () => {},
+    () => motion.cancel(),
+  );
   const lost = (e: Event) => {
     e.preventDefault();
     onError();
   };
-  renderer.domElement.addEventListener("pointerdown", down);
-  renderer.domElement.addEventListener("pointerup", up);
-  renderer.domElement.addEventListener("pointercancel", cancel);
   renderer.domElement.addEventListener("webglcontextlost", lost);
   reset();
   resize();
@@ -199,6 +202,7 @@ export function createScene(
     stats,
     reset,
     zoom(delta: number) {
+      motion.cancel();
       camera.zoom = Math.max(
         controls.minZoom,
         Math.min(controls.maxZoom, camera.zoom * delta),
@@ -207,6 +211,7 @@ export function createScene(
       requestRender();
     },
     pan(x: number, z: number) {
+      motion.cancel();
       const v = new T.Vector3(x, 0, z);
       camera.position.add(v);
       controls.target.add(v);
@@ -215,17 +220,18 @@ export function createScene(
     },
     select(code: string | null) {
       const changed = selected !== code;
+      if (changed && code && !selected)
+        previousView = { target: controls.target.clone(), zoom: camera.zoom };
       selected = code;
       const f = features.find((f) => f.code === code);
-      if (f) {
-        if (changed && f.code !== "alp") {
-          const delta = new T.Vector3(f.anchor[0], 3, f.anchor[1]).sub(
-            controls.target,
-          );
-          controls.target.add(delta);
-          camera.position.add(delta);
-          controls.update();
-        }
+      if (f && changed) {
+        motion.to(
+          new T.Vector3(f.anchor[0], 3, f.anchor[1]),
+          Math.max(camera.zoom, 1.5),
+        );
+      } else if (changed && !code && previousView) {
+        motion.to(previousView.target, previousView.zoom);
+        previousView = null;
       }
       requestRender();
     },
@@ -234,10 +240,8 @@ export function createScene(
       cancelAnimationFrame(frame);
       observer.disconnect();
       controls.dispose();
+      unbindInput();
       renderer.domElement.removeEventListener("webglcontextlost", lost);
-      renderer.domElement.removeEventListener("pointerdown", down);
-      renderer.domElement.removeEventListener("pointerup", up);
-      renderer.domElement.removeEventListener("pointercancel", cancel);
       const geometries = new Set<T.BufferGeometry>(),
         materials = new Set<T.Material>();
       scene.traverse((o) => {
