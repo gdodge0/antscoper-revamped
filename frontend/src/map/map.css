@@ -219,9 +219,6 @@
 .has-room .full-campus-map .iso-footer {
   right: 440px;
 }
-.full-campus-map .iso-heading h2 {
-  font-size: clamp(20px, 2vw, 29px);
-}
 @media (min-width: 1024px) {
   .full-campus-map .map-intro-panel {
     top: 24px;
@@ -265,7 +262,7 @@
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
   }
-  .is-header-preview .iso-controls {
+  .full-campus-map .iso-controls {
     top: 24px;
   }
 }

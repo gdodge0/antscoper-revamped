@@ -37,7 +37,6 @@ export default function FullCampusMap({
     [detail, setDetail] = useState<DetailState>({ loading: 0, failed: [] }),
     [district, setDistrict] = useState("");
   const [params, setParams] = useSearchParams();
-  const headerPreview = params.get("preview") === "map-header";
   const counts = useMemo(
     () =>
       Object.fromEntries(
@@ -148,26 +147,13 @@ export default function FullCampusMap({
   );
   return (
     <section
-      className={`campus-map iso-map full-campus-map${headerPreview ? " is-header-preview" : ""}`}
+      className="campus-map iso-map full-campus-map"
       aria-label="Isometric UCI campus map"
     >
-      <div className={`iso-heading${headerPreview ? " map-intro-panel" : ""}`}>
-        {headerPreview ? (
-          <span className="eyebrow">University of California, Irvine</span>
-        ) : (
-          <>
-            <span className="eyebrow">University of California, Irvine</span>
-            <h2>
-              A little room on campus<span>UCI</span>
-            </h2>
-          </>
-        )}
-        {!headerPreview && (
-          <p>Explore a district. Find your next quiet corner.</p>
-        )}
-        {headerPreview && districtMenu}
+      <div className="iso-heading map-intro-panel">
+        <span className="eyebrow">University of California, Irvine</span>
+        {districtMenu}
       </div>
-      {!headerPreview && districtMenu}
       <div
         className="iso-stage"
         ref={host}
