@@ -545,7 +545,12 @@ function Workspace({
     [snap, setSnap] = useState<"half" | "full" | "collapsed">("half");
   const [storageMessage, setStorageMessage] = useState("");
   const search = useRef<HTMLInputElement>(null),
-    sheetGesture = useRef<{ id: number; x: number; y: number } | null>(null),
+    sheetGesture = useRef<{
+      id: number;
+      x: number;
+      y: number;
+      tap: "toggle" | "expand" | null;
+    } | null>(null),
     dragged = useRef(false),
     initial = useRef(false);
   const updateParams = (
@@ -841,9 +846,91 @@ function Workspace({
             />
           </Suspense>
         </MapPreviewBoundary>
-        <section className="results-panel" aria-label="Find a room">
+        <section
+          className="results-panel"
+          aria-label="Find a room"
+          onPointerDown={(e) => {
+            if (
+              !e.isPrimary ||
+              e.button !== 0 ||
+              window.innerWidth >= 1024 ||
+              selectedRoom ||
+              activeBuilding ||
+              searchOpen ||
+              query
+            )
+              return;
+            const target = e.target as Element;
+            const surface = target.closest<HTMLElement>(
+              "[data-sheet-drag], .week-navigation",
+            );
+            if (
+              !surface ||
+              (target.closest("button, a, input, select, textarea") &&
+                surface.dataset.sheetDrag !== "toggle")
+            )
+              return;
+            sheetGesture.current = {
+              id: e.pointerId,
+              x: e.clientX,
+              y: e.clientY,
+              tap:
+                surface.dataset.sheetDrag === "toggle"
+                  ? "toggle"
+                  : surface.dataset.sheetDrag === "expand"
+                    ? "expand"
+                    : null,
+            };
+            dragged.current = false;
+            e.currentTarget.setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => {
+            const start = sheetGesture.current;
+            if (start?.id !== e.pointerId) return;
+            if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8)
+              dragged.current = true;
+          }}
+          onPointerUp={(e) => {
+            const start = sheetGesture.current;
+            if (start?.id !== e.pointerId) return;
+            sheetGesture.current = null;
+            const dx = e.clientX - start.x,
+              dy = e.clientY - start.y;
+            if (Math.hypot(dx, dy) > 8) dragged.current = true;
+            if (Math.abs(dy) > 25 && Math.abs(dy) > Math.abs(dx)) {
+              dragged.current = true;
+              // Every swipe moves one stop; the split view is never skipped.
+              setSnap((current) =>
+                dy > 0
+                  ? current === "full"
+                    ? "half"
+                    : "collapsed"
+                  : current === "collapsed"
+                    ? "half"
+                    : "full",
+              );
+            } else if (!dragged.current) {
+              if (start.tap === "toggle")
+                setSnap((current) =>
+                  current === "half" ? "collapsed" : "half",
+                );
+              else if (start.tap === "expand") setSnap("half");
+            }
+          }}
+          onPointerCancel={(e) => {
+            if (sheetGesture.current?.id !== e.pointerId) return;
+            sheetGesture.current = null;
+            dragged.current = true;
+          }}
+          onLostPointerCapture={(e) => {
+            if (sheetGesture.current?.id !== e.pointerId) return;
+            sheetGesture.current = null;
+            dragged.current = true;
+          }}
+        >
           <button
             className="sheet-handle"
+            data-sheet-drag="toggle"
             aria-label={
               snap === "collapsed"
                 ? "Expand room list"
@@ -852,50 +939,6 @@ function Workspace({
                   : "Collapse room list"
             }
             aria-expanded={snap !== "collapsed"}
-            onPointerDown={(e) => {
-              if (!e.isPrimary || e.button !== 0) return;
-              sheetGesture.current = {
-                id: e.pointerId,
-                x: e.clientX,
-                y: e.clientY,
-              };
-              dragged.current = false;
-              e.currentTarget.setPointerCapture(e.pointerId);
-            }}
-            onPointerMove={(e) => {
-              const start = sheetGesture.current;
-              if (start?.id !== e.pointerId) return;
-              if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8)
-                dragged.current = true;
-            }}
-            onPointerUp={(e) => {
-              const start = sheetGesture.current;
-              if (start?.id !== e.pointerId) return;
-              sheetGesture.current = null;
-              const dx = e.clientX - start.x,
-                dy = e.clientY - start.y;
-              if (Math.hypot(dx, dy) > 8) dragged.current = true;
-              if (Math.abs(dy) > 25 && Math.abs(dy) > Math.abs(dx)) {
-                dragged.current = true;
-                // Every swipe moves one stop; the split view is never skipped.
-                setSnap((current) =>
-                  dy > 0
-                    ? current === "full"
-                      ? "half"
-                      : "collapsed"
-                    : current === "collapsed"
-                      ? "half"
-                      : "full",
-                );
-              } else if (!dragged.current)
-                setSnap((current) =>
-                  current === "half" ? "collapsed" : "half",
-                );
-            }}
-            onPointerCancel={() => {
-              sheetGesture.current = null;
-              dragged.current = true;
-            }}
             onClick={(e) => {
               // Pointer taps are handled on release: browsers can suppress the
               // synthesized click after a swipe. Keep click for keyboard/AT use.
@@ -909,8 +952,11 @@ function Workspace({
           </button>
           <div
             className="collapsed-summary"
+            data-sheet-drag="expand"
             aria-hidden={snap !== "collapsed"}
-            onClick={() => setSnap("half")}
+            onClick={(e) => {
+              if (e.detail === 0) setSnap("half");
+            }}
           >
             <h2>
               {allUnknown
@@ -964,7 +1010,7 @@ function Workspace({
                 </p>
               </div>
             )}
-            <div className="time-heading">
+            <div className="time-heading" data-sheet-drag="swipe">
               <h2>
                 {dateLabel(selectedDate)}, {formatTime(time)}
               </h2>

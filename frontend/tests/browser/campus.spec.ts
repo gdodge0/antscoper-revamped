@@ -177,9 +177,33 @@ test("mobile sheet swipes and taps can always return to the split view", async (
       await expect(page.locator(".panel-content")).toBeVisible();
     }
   }
-  async function swipe(dy: number, dx = 0, cancel = false) {
-    const box = (await handle.boundingBox())!,
-      x = box.x + box.width / 2,
+  async function swipe(
+    dy: number,
+    dx = 0,
+    cancel = false,
+    surface:
+      | "handle"
+      | "clock"
+      | "range"
+      | "summary"
+      | "left"
+      | "right" = "handle",
+  ) {
+    const origin =
+      surface === "clock"
+        ? page.locator(".time-heading h2")
+        : surface === "range"
+          ? panel.locator(".week-range")
+          : surface === "summary"
+            ? page.locator(".collapsed-summary h2")
+            : handle;
+    const box = (await origin.boundingBox())!,
+      x =
+        surface === "left"
+          ? box.x + 4
+          : surface === "right"
+            ? box.x + box.width - 4
+            : box.x + box.width / 2,
       y = box.y + box.height / 2;
     await cdp.send("Input.dispatchTouchEvent", {
       type: "touchStart",
@@ -206,6 +230,29 @@ test("mobile sheet swipes and taps can always return to the split view", async (
     await swipe(distance);
     await state("half");
   }
+  // The whole header can be grabbed without aiming at the small visual handle.
+  for (const surface of ["clock", "range", "left", "right"] as const) {
+    await swipe(-40, 0, false, surface);
+    await state("full");
+    await swipe(40, 0, false, surface);
+    await state("half");
+  }
+  await swipe(40);
+  await state("collapsed");
+  await swipe(-40, 0, false, "summary");
+  await state("half");
+  await swipe(40);
+  await state("collapsed");
+  await page.locator(".collapsed-summary h2").tap();
+  await state("half");
+  // Header controls retain their normal taps instead of starting a sheet drag.
+  const navigation = panel.locator(".week-navigation");
+  const week = await navigation.locator(".week-range").textContent();
+  await navigation.getByRole("button", { name: "Next week" }).tap();
+  await expect(navigation.locator(".week-range")).not.toHaveText(week!);
+  await navigation.getByRole("button", { name: "Previous week" }).tap();
+  await expect(navigation.locator(".week-range")).toHaveText(week!);
+  await state("half");
   // Slight movements and cancelled gestures must not become handle taps.
   await swipe(12);
   await state("half");
@@ -251,6 +298,10 @@ test("mobile sheet swipes and taps can always return to the split view", async (
   await state("collapsed");
   await handle.focus();
   await page.keyboard.press("Enter");
+  await state("half");
+  await page.locator(".mobile-snapshot").tap();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.getByRole("button", { name: "Close about" }).tap();
   await state("half");
   await page.screenshot({ path: info.outputPath("split-restored.png") });
   await cdp.detach();

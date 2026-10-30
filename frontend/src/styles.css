@@ -1166,13 +1166,14 @@ kbd {
     box-shadow: var(--shadow-md);
   }
   .results-panel {
+    --sheet-gutter: 20px;
     position: absolute;
     left: 0;
     right: 0;
     top: 38dvh;
     bottom: 0;
     z-index: 4;
-    padding: 0 20px env(safe-area-inset-bottom);
+    padding: 0 var(--sheet-gutter) env(safe-area-inset-bottom);
     box-shadow: var(--shadow-lg);
     border-radius: 4px 4px 0 0;
     transition: top 0.2s ease;
@@ -1180,12 +1181,23 @@ kbd {
   .sheet-handle {
     display: flex;
     flex: none;
-    width: 100%;
+    width: calc(100% + 2 * var(--sheet-gutter));
+    margin-inline: calc(-1 * var(--sheet-gutter));
     height: 24px;
     align-items: center;
     justify-content: center;
     touch-action: none;
     padding: 0;
+  }
+  .results-panel [data-sheet-drag],
+  .results-panel .week-navigation {
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+  }
+  .results-panel [data-sheet-drag]:active,
+  .results-panel .week-navigation:active {
+    cursor: grabbing;
   }
   .sheet-handle i {
     width: 40px;
@@ -1510,8 +1522,7 @@ kbd {
 }
 @media (max-width: 370px) {
   .results-panel {
-    padding-left: 16px;
-    padding-right: 16px;
+    --sheet-gutter: 16px;
   }
   .time-heading h2 {
     font-size: 17px;
