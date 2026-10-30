@@ -2,6 +2,8 @@
 
 Find classrooms with time between classes at UC Irvine. React, TypeScript and Vite power the approved Broadsheet UI, with an architectural campus map, mobile pull-up sheet, desktop room list, and dated schedules. A Python worker publishes schedules to an unprivileged Nginx container through a persistent volume.
 
+Production: **[antscoper.gdodge.dev](https://antscoper.gdodge.dev)**.
+
 ## Run locally
 
 Use Node 24 (see `.node-version`), npm and Python 3.11+.
@@ -63,6 +65,8 @@ python3 -B -m tests.container_smoke
 ```
 
 GitHub Actions runs four required checks: **Frontend**, **Worker**, **Browser**, and **Containers**. `main` is production; `version-3` retains the pre-revamp application. See [deployment and operations](docs/deployment.md) for GitHub settings, Coolify, updates and restores.
+
+Reviewed live views: [desktop](docs/preview/live-desktop.png), [mobile](docs/preview/live-phone.png), and [dated finals](docs/preview/live-finals.png).
 
 ## Docker / Coolify
 
