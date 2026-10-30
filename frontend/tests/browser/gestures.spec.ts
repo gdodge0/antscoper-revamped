@@ -16,6 +16,9 @@ async function openDial(page: Page, time = "14:15") {
   await page.goto(`/?map=schematic&date=2026-10-29&time=${time}`);
   const slider = page.getByRole("slider", { name: "Time of day" });
   await expect(slider).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  if (page.viewportSize()!.width >= 1024)
+    await expect(page.locator(".room-detail")).toBeVisible();
   return slider;
 }
 
@@ -57,6 +60,41 @@ async function pointer(page: Page, touch: boolean) {
 
 const writes = (page: Page) =>
   page.evaluate(() => (window as any).historyWrites as number);
+
+test("room-only navigation preserves an active time-dial drag", async ({
+  page,
+}, info) => {
+  test.skip(
+    !!info.project.use.isMobile,
+    "Desktop startup selects a room automatically",
+  );
+  const slider = await openDial(page);
+  const box = (await slider.boundingBox())!,
+    x = box.x + box.width / 2,
+    y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x - 30, y);
+  await expect(slider).toHaveAttribute("aria-valuenow", "900");
+  // Reproduce a room-only navigation while the pointer remains captured, as can
+  // happen when the initial automatic selection finishes after input begins.
+  await page.evaluate(() => {
+    const url = new URL(location.href);
+    url.searchParams.set("room", "ssl-122");
+    history.pushState(history.state, "", url);
+    dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  });
+  await expect(page.locator(".room-detail h1")).toHaveText("SSL 122");
+  await expect(slider).toHaveAttribute("aria-valuenow", "900");
+  await page.mouse.move(x - 40, y);
+  await expect(slider).toHaveAttribute("aria-valuenow", "915");
+  await page.mouse.up();
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("time"))
+    .toBe("15:15");
+  await page.reload();
+  await expect(slider).toHaveAttribute("aria-valuenow", "915");
+});
 
 test("time dial reverses immediately after overshooting either end", async ({
   page,

@@ -507,26 +507,27 @@ function Workspace({
         : FullCampusMap;
   const roomId = params.get("room"),
     buildingCode = params.get("building"),
-    query = params.get("q") || "";
+    query = params.get("q") || "",
+    dateParam = params.get("date"),
+    timeParam = params.get("time"),
+    liveParam = params.get("live");
   const demo = source.metadata.mode !== "live";
-  const demoPreview = demo && params.get("live") !== "1";
+  const demoPreview = demo && liveParam !== "1";
   const [clock, setClock] = useState(campusClock);
   const [scrubTime, setScrubTime] = useState<number | null>(null);
   const preview =
     scrubTime !== null ||
-    validDate(params.get("date")) ||
-    parseTime(params.get("time")) !== null ||
+    validDate(dateParam) ||
+    parseTime(timeParam) !== null ||
     demoPreview;
-  const selectedDate = validDate(params.get("date"))
-    ? params.get("date")!
+  const selectedDate = validDate(dateParam)
+    ? dateParam
     : demoPreview
       ? source.metadata.demoDate || "2026-10-29"
       : clock.date;
   const day = weekday(selectedDate),
     time =
-      scrubTime ??
-      parseTime(params.get("time")) ??
-      (demoPreview ? 855 : clock.time);
+      scrubTime ?? parseTime(timeParam) ?? (demoPreview ? 855 : clock.time);
   const data = useMemo(
     () => projectWeek(source, selectedDate),
     [source, selectedDate, clock],
@@ -679,8 +680,9 @@ function Workspace({
     return () => clearInterval(timer);
   }, []);
   useEffect(() => {
+    // Room-only navigation must not discard an in-progress dial drag.
     setScrubTime(null);
-  }, [params]);
+  }, [dateParam, timeParam, liveParam]);
   useEffect(() => {
     function key(e: KeyboardEvent) {
       if (
