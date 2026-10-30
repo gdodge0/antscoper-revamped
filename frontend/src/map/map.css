@@ -119,6 +119,142 @@
 .iso-controls button:disabled {
   opacity: 0.4;
 }
+.map-settings-panel {
+  position: fixed;
+  inset: 96px 70px auto auto;
+  margin: 0;
+  width: 280px;
+  max-width: calc(100vw - 84px);
+  max-height: calc(100dvh - 112px);
+  overflow-y: auto;
+  padding: 18px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+}
+.map-settings-header,
+.map-setting-toggle,
+.map-setting-relief > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.map-settings-header h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 500;
+}
+.iso-controls .map-settings-header .icon-button {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+}
+.map-setting-toggle {
+  margin-top: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+  cursor: pointer;
+}
+.map-setting-toggle small {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-neutral-700);
+  font-size: 11px;
+}
+.map-setting-toggle input {
+  appearance: none;
+  flex: none;
+  width: 36px;
+  height: 22px;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid var(--color-neutral-400);
+  border-radius: 12px;
+  background: var(--color-neutral-200);
+  cursor: pointer;
+}
+.map-setting-toggle input::before {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-neutral-700);
+}
+.map-setting-toggle input:checked {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.map-setting-toggle input:checked::before {
+  transform: translateX(14px);
+  background: white;
+}
+.map-setting-relief {
+  margin-top: 16px;
+}
+.map-setting-relief output {
+  font-variant-numeric: tabular-nums;
+}
+.map-setting-relief input {
+  display: block;
+  width: 100%;
+  margin: 12px 0 4px;
+  accent-color: var(--color-accent);
+}
+.map-setting-relief input:disabled {
+  opacity: 0.4;
+}
+.map-relief-limits,
+.map-setting-relief p {
+  color: var(--color-neutral-700);
+  font-size: 11px;
+}
+.map-setting-shadows {
+  margin-top: 16px;
+  border-top: 1px solid var(--color-divider);
+}
+.map-setting-shadows .map-setting-toggle {
+  margin-top: 0;
+  border-top: 0;
+}
+.map-setting-shadows .map-setting-toggle:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.map-setting-relief p {
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+.map-settings-panel input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+.map-settings-reset {
+  display: block;
+  width: 100%;
+  min-height: 40px;
+  margin-top: 18px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.map-settings-reset:hover {
+  background: var(--color-surface);
+}
+.map-settings-reset:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
 .iso-north {
   position: absolute;
   bottom: 77px;
@@ -318,6 +454,13 @@
   }
   .full-campus-map .iso-controls {
     top: calc(var(--mobile-map-top) + 12px);
+  }
+  .map-settings-panel {
+    top: calc(var(--mobile-map-top) + 12px);
+    right: 54px;
+    max-width: calc(100vw - 66px);
+    padding: 16px;
+    max-height: calc(100dvh - var(--mobile-map-top) - 24px);
   }
   .district-label {
     font-size: 10px;

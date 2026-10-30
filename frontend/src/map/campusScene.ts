@@ -15,9 +15,21 @@ import {
 import {
   createCampusLandscape,
   createCampusOverview,
+  setCampusTerrainShadows,
   disposeGroup,
 } from "./campusGeometry";
 import { SelectionOutline } from "./SelectionOutline";
+import { createCampusBridges, campusBridges } from "./bridges";
+import { bridgeAccessBounds } from "./bridgeAccess";
+import {
+  groundHeightAt,
+  buildingElevation,
+  locationElevation,
+  terrainRelief,
+  terrainEnabled,
+  configureTerrain,
+} from "./terrain";
+import { defaultMapSettings, type MapSettings } from "./mapSettings";
 
 const loaders: Record<string, () => Promise<{ default: () => T.Group }>> = {
   landmarks: () => import("./models/landmarks"),
@@ -33,13 +45,30 @@ export interface DetailState {
   loading: number;
   failed: string[];
 }
+interface CampusView {
+  kind: "overview" | "district" | "building" | "bridge";
+  id?: string;
+  span: number;
+}
+export interface CampusViewSnapshot {
+  view: CampusView;
+  target: [number, number, number];
+  ground: number;
+  zoom: number;
+  selected: string | null;
+  navigating: boolean;
+}
 export function createCampusScene(
   host: HTMLDivElement,
   labels: Map<string, HTMLElement>,
   onPick: (id: string) => void,
   onError: () => void,
   onDetailState: (state: DetailState) => void,
+  settings: MapSettings = defaultMapSettings,
+  restore?: CampusViewSnapshot,
 ) {
+  configureTerrain(settings);
+  host.dataset.ready = "false";
   const scene = new T.Scene();
   scene.background = new T.Color("#f3f2f2");
   const mobile = innerWidth < 1024;
@@ -63,9 +92,26 @@ export function createCampusScene(
   controls.maxZoom = 32;
   controls.touches.TWO = T.TOUCH.DOLLY_PAN;
   controls.mouseButtons.RIGHT = T.MOUSE.PAN;
-  const landscape = createCampusLandscape(),
+  let shadows = {
+    terrainShadows: settings.terrainShadows,
+    buildingShadows: settings.buildingShadows,
+  };
+  function applyBuildingShadows(group: T.Group) {
+    group.traverse((object) => {
+      if (!(object instanceof T.Mesh)) return;
+      // Keep the original solid-volume caster flag; glazing and mullions must
+      // remain non-casters when shadows are enabled again. Trees are separate.
+      object.userData.structureCaster ??= object.castShadow;
+      object.castShadow =
+        shadows.buildingShadows && object.userData.structureCaster;
+    });
+  }
+  const landscape = createCampusLandscape(shadows.terrainShadows),
     overview = createCampusOverview();
-  scene.add(landscape, ...overview.values());
+  const bridges = createCampusBridges();
+  for (const group of [bridges, ...overview.values()])
+    applyBuildingShadows(group);
+  scene.add(landscape, bridges, ...overview.values());
   scene.add(new T.AmbientLight(0xffffff, 1.8));
   const sun = new T.DirectionalLight(0xffffff, 2.1);
   sun.castShadow = true;
@@ -83,17 +129,17 @@ export function createCampusScene(
     projected = new T.Vector3();
   const [west, south] = project([campusBounds[0], campusBounds[1]]),
     [east, north] = project([campusBounds[2], campusBounds[3]]);
-  const campusCenter = new T.Vector3((west + east) / 2, 0, (north + south) / 2);
+  const campusCenter = new T.Vector3(
+    (west + east) / 2,
+    groundHeightAt((west + east) / 2, (north + south) / 2),
+    (north + south) / 2,
+  );
   const viewDirection = new T.Vector3(-2200, 2200, 2200);
   let frame = 0,
     disposed = false,
     frames = 0,
     selected: string | null = null;
-  let view: {
-    kind: "overview" | "district" | "building";
-    id?: string;
-    span: number;
-  } = { kind: "overview", span: 1900 };
+  let view: CampusView = { kind: "overview", span: 1900 };
   let buildingLabels = false,
     loaded = false,
     geometryBuilds = 0,
@@ -114,6 +160,7 @@ export function createCampusScene(
       .then((module) => {
         if (disposed) return;
         const group = module.default();
+        applyBuildingShadows(group);
         if (disposed) {
           disposeGroup(group);
           return;
@@ -216,8 +263,10 @@ export function createCampusScene(
     f.forEach((f) =>
       f.polygons.forEach((p) =>
         p[0].forEach(([x, z]) => {
-          box.expandByPoint(new T.Vector3(x, 0, z));
-          box.expandByPoint(new T.Vector3(x, f.height, z));
+          box.expandByPoint(new T.Vector3(x, buildingElevation(f).low, z));
+          box.expandByPoint(
+            new T.Vector3(x, buildingElevation(f).base + f.height, z),
+          );
         }),
       ),
     );
@@ -235,7 +284,9 @@ export function createCampusScene(
     buildingLabels = false;
     view = { kind: "overview", span: mobile ? 1100 : 1900 };
     navigating = false;
-    moveTarget(mobile ? new T.Vector3(170, 0, 130) : campusCenter);
+    moveTarget(
+      mobile ? new T.Vector3(170, groundHeightAt(170, 130), 130) : campusCenter,
+    );
     fit(view.span, mobile ? 1 : 1050);
     requestRender();
   }
@@ -245,8 +296,30 @@ export function createCampusScene(
     const [x, z] = project(district.coordinate);
     view = { kind: "district", id, span: district.span };
     navigating = false;
-    moveTarget(new T.Vector3(x, 10, z));
+    moveTarget(new T.Vector3(x, groundHeightAt(x, z) + 10, z));
     fit(district.span, district.span * 0.75);
+    requestRender();
+  }
+  function focusBridge(id: string) {
+    const bridge = campusBridges.find((b) => b.id === id);
+    if (!bridge) return;
+    const box = new T.Box3();
+    for (const s of bridge.samples) {
+      const [x, z] = bridge.pointAt(s);
+      box.expandByPoint(new T.Vector3(x, groundHeightAt(x, z), z));
+      box.expandByPoint(new T.Vector3(x, bridge.deckAt(s) + 5, z));
+    }
+    for (const point of bridgeAccessBounds(bridge)) {
+      box.expandByPoint(point);
+      box.expandByPoint(point.clone().add(new T.Vector3(0, 1.2, 0)));
+    }
+    const size = box.getSize(new T.Vector3()),
+      center = box.getCenter(new T.Vector3());
+    const span = Math.max(110, (size.x + size.z) * 0.707 + 65);
+    view = { kind: "bridge", id, span };
+    navigating = false;
+    moveTarget(center);
+    fit(span, (size.x + size.z) * 0.408 + size.y * 0.816 + 60);
     requestRender();
   }
   function positionLabels(pixelsPerMeter: number) {
@@ -293,7 +366,9 @@ export function createCampusScene(
       const el = labels.get(item.id);
       if (!el) continue;
       const [xx, zz] = project(item.coordinate);
-      projected.set(xx, item.height + 7, zz).project(camera);
+      projected
+        .set(xx, locationElevation(item.id, [xx, zz]) + item.height + 7, zz)
+        .project(camera);
       let x = (projected.x * 0.5 + 0.5) * w,
         y = (-projected.y * 0.5 + 0.5) * h;
       const width = item.id.startsWith("district:")
@@ -391,6 +466,22 @@ export function createCampusScene(
     host.dataset.triangles = String(renderer.info.render.triangles);
     host.dataset.drawCalls = String(renderer.info.render.calls);
     host.dataset.lod = "full";
+    host.dataset.terrainRelief = String(terrainRelief);
+    host.dataset.terrainEnabled = String(terrainEnabled);
+    host.dataset.terrainShadows = String(shadows.terrainShadows);
+    host.dataset.buildingShadows = String(shadows.buildingShadows);
+    let structureCasters = 0;
+    scene.traverse((object) => {
+      if (
+        object instanceof T.Mesh &&
+        object.castShadow &&
+        object.userData.structureCaster
+      )
+        structureCasters++;
+    });
+    host.dataset.buildingShadowCasters = String(structureCasters);
+    host.dataset.bridges = String(campusBridges.length);
+    host.dataset.view = view.kind === "bridge" ? view.id! : view.kind;
     host.dataset.geometryBuilds = String(geometryBuilds);
     host.dataset.loaded = [...detail.keys()].join(",");
     host.dataset.selected = selected || "";
@@ -411,6 +502,7 @@ export function createCampusScene(
     outline.resize(w, h, renderer.getPixelRatio());
     if (!navigating) {
       if (view.kind === "building" && view.id) focusLocation(view.id);
+      else if (view.kind === "bridge" && view.id) focusBridge(view.id);
       else
         fit(
           view.span,
@@ -464,9 +556,12 @@ export function createCampusScene(
       (-(e.clientY - box.top) / box.height) * 2 + 1,
     );
     raycaster.setFromCamera(pointer, camera);
-    const targets = [...overview.values(), ...detail.values()].filter(
-      (o) => o.visible,
-    );
+    const targets = [
+      landscape,
+      bridges,
+      ...overview.values(),
+      ...detail.values(),
+    ].filter((o) => o.visible);
     const hits = raycaster
       .intersectObjects(targets, true)
       .filter((hit) => hit.object.visible);
@@ -497,12 +592,53 @@ export function createCampusScene(
   renderer.domElement.addEventListener("pointercancel", cancel);
   renderer.domElement.addEventListener("wheel", wheel, { passive: true });
   renderer.domElement.addEventListener("webglcontextlost", lost);
-  reset();
-  resize();
+  if (restore) {
+    view = { ...restore.view };
+    selected = restore.selected;
+    navigating = true;
+    const target = new T.Vector3(...restore.target);
+    target.y += groundHeightAt(target.x, target.z) - restore.ground;
+    moveTarget(target);
+    camera.zoom = restore.zoom;
+    resize();
+    navigating = restore.navigating;
+  } else {
+    reset();
+    resize();
+  }
   void loadCampus();
   return {
     reset,
     focusDistrict,
+    focusBridge,
+    setShadows(next: Pick<MapSettings, "terrainShadows" | "buildingShadows">) {
+      if (
+        next.terrainShadows === shadows.terrainShadows &&
+        next.buildingShadows === shadows.buildingShadows
+      )
+        return;
+      const terrainChanged = next.terrainShadows !== shadows.terrainShadows;
+      shadows = {
+        terrainShadows: next.terrainShadows,
+        buildingShadows: next.buildingShadows,
+      };
+      if (terrainChanged)
+        setCampusTerrainShadows(landscape, shadows.terrainShadows);
+      for (const group of [bridges, ...overview.values(), ...detail.values()])
+        applyBuildingShadows(group);
+      shadowDirty = true;
+      requestRender();
+    },
+    snapshot(): CampusViewSnapshot {
+      return {
+        view: { ...view },
+        target: controls.target.toArray(),
+        ground: groundHeightAt(controls.target.x, controls.target.z),
+        zoom: camera.zoom,
+        selected,
+        navigating,
+      };
+    },
     redraw: requestRender,
     // Browsers cache rejected ES module fetches; a page reload clears that cache.
     // Room/building URLs are retained, and the overview remains usable meanwhile.

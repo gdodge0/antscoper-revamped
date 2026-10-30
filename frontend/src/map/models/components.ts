@@ -1,7 +1,9 @@
 import * as T from "three";
 import { alp } from "../architecture";
+import { buildingElevation } from "../terrain";
 import {
   CampusBuilder,
+  addFoundation,
   polygonGeometry,
   disposeGroup,
   type Finish,
@@ -573,6 +575,63 @@ function model(b: CampusBuilder, f: CampusFeature, p: ArchitectureProfile) {
   }
 }
 
+function mesaParking(b: CampusBuilder, f: CampusFeature) {
+  const spacing = f.height / f.levels;
+  const entrance: Point = [-178.18594319672087, -361.44490800006764];
+  for (const polygon of f.polygons) {
+    const perimeter = edges(polygon[0]);
+    for (let floor = 0; floor <= f.levels; floor++)
+      b.add(
+        polygonGeometry(polygon, 0.22, floor * spacing - 0.22),
+        "roof",
+        f.renderId,
+      );
+    for (const e of perimeter) {
+      const bays = Math.max(1, Math.ceil(e.length / 8)),
+        bay = e.length / bays;
+      for (let i = 0; i < bays; i++) {
+        const d = (i + 0.5) * bay,
+          p = at(e, d);
+        // Columns span the building; open parking bays remain actual openings.
+        const column = at(e, i * bay);
+        if (Math.hypot(column[0] - entrance[0], column[1] - entrance[1]) > 2.3)
+          bar(
+            b,
+            f,
+            e,
+            i * bay,
+            0.55,
+            f.height / 2,
+            f.height,
+            0.6,
+            -0.1,
+            "wall",
+          );
+        for (let floor = 0; floor < f.levels; floor++) {
+          if (
+            floor === 2 &&
+            Math.hypot(p[0] - entrance[0], p[1] - entrance[1]) < 5.5
+          )
+            continue;
+          bar(
+            b,
+            f,
+            e,
+            d,
+            bay - 0.65,
+            floor * spacing + 0.6,
+            0.85,
+            0.18,
+            0.1,
+            "lightTrim",
+            true,
+          );
+        }
+      }
+    }
+  }
+}
+
 export function defineDistrict(
   district: string,
   profiles: ArchitectureProfile[],
@@ -581,7 +640,11 @@ export function defineDistrict(
     byId = new Map(profiles.map((p) => [p.id, p]));
   for (const f of campusFeatures.filter((f) => f.district === district)) {
     b.tile = `${Math.floor(f.anchor[0] / 400)},${Math.floor(f.anchor[1] / 400)}`;
-    if (f.profile === "alp") {
+    b.elevation = buildingElevation(f).base;
+    addFoundation(b, f);
+    if (f.id === "w171169301") {
+      mesaParking(b, f);
+    } else if (f.profile === "alp") {
       const original = alp();
       original.updateMatrixWorld(true);
       original.traverse((o) => {

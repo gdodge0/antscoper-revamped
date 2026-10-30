@@ -150,10 +150,9 @@ test("campus is the default, has no automatic room selection, and stays idle", a
   expect(external).toEqual([]);
 });
 
-test("mobile sheet swipes and taps can always return to the split view", async ({
-  page,
-}, info) => {
-  test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
+// Keep gesture scenarios independent: the combined flow exceeded CI's
+// per-test budget even though its individual state assertions passed.
+async function mobileSheet(page: Page) {
   await ready(page);
   const app = page.locator(".app"),
     panel = page.locator(".results-panel"),
@@ -219,92 +218,125 @@ test("mobile sheet swipes and taps can always return to the split view", async (
       touchPoints: [],
     });
   }
-  // Short swipes and long swipes both stop at the middle position.
-  for (const distance of [40, 140]) {
-    await swipe(distance);
+  return { app, panel, handle, cdp, state, swipe };
+}
+
+test("mobile sheet swipes and taps can always return to the split view", async ({
+  page,
+}, info) => {
+  test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
+  const { swipe, state, cdp } = await mobileSheet(page);
+  try {
+    // Short swipes and long swipes both stop at the middle position.
+    for (const distance of [40, 140]) {
+      await swipe(distance);
+      await state("collapsed");
+      await swipe(-distance);
+      await state("half");
+      await swipe(-distance);
+      await state("full");
+      await swipe(distance);
+      await state("half");
+    }
+    // The whole header can be grabbed without aiming at the small visual handle.
+    for (const surface of ["clock", "range", "left", "right"] as const) {
+      await swipe(-40, 0, false, surface);
+      await state("full");
+      await swipe(40, 0, false, surface);
+      await state("half");
+    }
+    await swipe(40);
     await state("collapsed");
-    await swipe(-distance);
+    await swipe(-40, 0, false, "summary");
     await state("half");
-    await swipe(-distance);
-    await state("full");
-    await swipe(distance);
+    await swipe(40);
+    await state("collapsed");
+    await page.locator(".collapsed-summary h2").tap();
     await state("half");
+  } finally {
+    await cdp.detach();
   }
-  // The whole header can be grabbed without aiming at the small visual handle.
-  for (const surface of ["clock", "range", "left", "right"] as const) {
-    await swipe(-40, 0, false, surface);
-    await state("full");
-    await swipe(40, 0, false, surface);
+});
+
+test("mobile sheet controls preserve taps, cancellation and keyboard recovery", async ({
+  page,
+}, info) => {
+  test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
+  const { panel, handle, swipe, state, cdp } = await mobileSheet(page);
+  try {
+    // Header controls retain their normal taps instead of starting a sheet drag.
+    const navigation = panel.locator(".week-navigation");
+    const week = await navigation.locator(".week-range").textContent();
+    await navigation.getByRole("button", { name: "Next week" }).tap();
+    await expect(navigation.locator(".week-range")).not.toHaveText(week!);
+    await navigation.getByRole("button", { name: "Previous week" }).tap();
+    await expect(navigation.locator(".week-range")).toHaveText(week!);
     await state("half");
+    // Slight movements and cancelled gestures must not become handle taps.
+    await swipe(12);
+    await state("half");
+    await swipe(-12);
+    await state("half");
+    await swipe(10, 45);
+    await state("half");
+    await swipe(40, 0, true);
+    await state("half");
+    await handle.tap();
+    await state("collapsed");
+    await swipe(40);
+    await state("collapsed");
+    await handle.focus();
+    await page.keyboard.press("Enter");
+    await state("half");
+    await page.locator(".mobile-snapshot").tap();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.getByRole("button", { name: "Close about" }).tap();
+    await state("half");
+    await page.screenshot({ path: info.outputPath("split-restored.png") });
+  } finally {
+    await cdp.detach();
   }
-  await swipe(40);
-  await state("collapsed");
-  await swipe(-40, 0, false, "summary");
-  await state("half");
-  await swipe(40);
-  await state("collapsed");
-  await page.locator(".collapsed-summary h2").tap();
-  await state("half");
-  // Header controls retain their normal taps instead of starting a sheet drag.
-  const navigation = panel.locator(".week-navigation");
-  const week = await navigation.locator(".week-range").textContent();
-  await navigation.getByRole("button", { name: "Next week" }).tap();
-  await expect(navigation.locator(".week-range")).not.toHaveText(week!);
-  await navigation.getByRole("button", { name: "Previous week" }).tap();
-  await expect(navigation.locator(".week-range")).toHaveText(week!);
-  await state("half");
-  // Slight movements and cancelled gestures must not become handle taps.
-  await swipe(12);
-  await state("half");
-  await swipe(-12);
-  await state("half");
-  await swipe(10, 45);
-  await state("half");
-  await swipe(40, 0, true);
-  await state("half");
-  await swipe(-40);
-  await state("full");
-  // Lock the document while retaining native scrolling inside the room list.
-  const list = page.locator(".results-scroll"),
-    listBox = (await list.boundingBox())!;
-  const listX = listBox.x + listBox.width / 2;
-  const listY = listBox.y + Math.min(listBox.height - 25, 200);
-  await cdp.send("Input.dispatchTouchEvent", {
-    type: "touchStart",
-    touchPoints: [{ x: listX, y: listY, id: 0 }],
-  });
-  for (let i = 1; i <= 8; i++) {
+});
+
+test("mobile room-list scrolling keeps the sheet and document stable", async ({
+  page,
+}, info) => {
+  test.skip(!info.project.use.isMobile, "Mobile bottom sheet interaction");
+  const { swipe, state, cdp } = await mobileSheet(page);
+  try {
+    await swipe(-40);
+    await state("full");
+    // Lock the document while retaining native scrolling inside the room list.
+    const list = page.locator(".results-scroll"),
+      listBox = (await list.boundingBox())!;
+    const listX = listBox.x + listBox.width / 2;
+    const listY = listBox.y + Math.min(listBox.height - 25, 200);
     await cdp.send("Input.dispatchTouchEvent", {
-      type: "touchMove",
-      touchPoints: [{ x: listX, y: listY - i * 15, id: 0 }],
+      type: "touchStart",
+      touchPoints: [{ x: listX, y: listY, id: 0 }],
     });
-    await page.waitForTimeout(16);
+    for (let i = 1; i <= 8; i++) {
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ x: listX, y: listY - i * 15, id: 0 }],
+      });
+      await page.waitForTimeout(16);
+    }
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchEnd",
+      touchPoints: [],
+    });
+    await expect
+      .poll(() => list.evaluate((el) => el.scrollTop))
+      .toBeGreaterThan(0);
+    await state("full");
+    await swipe(-40);
+    await state("full");
+    await page.getByRole("button", { name: "Show map and room list" }).tap();
+    await state("half");
+  } finally {
+    await cdp.detach();
   }
-  await cdp.send("Input.dispatchTouchEvent", {
-    type: "touchEnd",
-    touchPoints: [],
-  });
-  await expect
-    .poll(() => list.evaluate((el) => el.scrollTop))
-    .toBeGreaterThan(0);
-  await state("full");
-  await swipe(-40);
-  await state("full");
-  await page.getByRole("button", { name: "Show map and room list" }).tap();
-  await state("half");
-  await handle.tap();
-  await state("collapsed");
-  await swipe(40);
-  await state("collapsed");
-  await handle.focus();
-  await page.keyboard.press("Enter");
-  await state("half");
-  await page.locator(".mobile-snapshot").tap();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.getByRole("button", { name: "Close about" }).tap();
-  await state("half");
-  await page.screenshot({ path: info.outputPath("split-restored.png") });
-  await cdp.detach();
 });
 
 test("all eight districts retain their panes and GPU buffers with honest counts", async ({

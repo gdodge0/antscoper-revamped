@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, "release/**"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -33,6 +33,7 @@ jobs:
           python-version: "3.13"
       - run: python -B -m unittest discover -s tests -v
       - run: python -B scripts/import_campus.py --check
+      - run: python -B scripts/import_terrain.py --check
   browser:
     name: Browser
     runs-on: ubuntu-24.04

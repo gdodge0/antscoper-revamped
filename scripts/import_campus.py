@@ -66,6 +66,12 @@ def centroid(ring):
 
 def validate(data, manifest, snapshot):
     ids = set()
+    for path in data["paths"]:
+        assert path["sourceId"] == path["id"].split("-")[0]
+        assert isinstance(path["bridge"], bool) and isinstance(path["tunnel"], bool)
+        assert isinstance(path["layer"], int)
+        assert len(path["points"]) >= 2
+        assert all(len(p) == 2 and all(math.isfinite(c) for c in p) for p in path["points"])
     for feature in data["buildings"]:
         assert feature["id"] not in ids, f"Duplicate {feature['id']}"
         ids.add(feature["id"])
@@ -167,12 +173,16 @@ def build(raw, config):
                 # Reject internally contradictory context tags rather than squashing seven stories to six meters.
                 if not primary and "building:levels" in t and not level * 2.5 <= height <= level * 5.5:
                     height = level * 3.6
+                context = config.get("contextGeometry", {}).get(identifier, {})
+                if context:
+                    level = context["levels"]
+                    height = context["height"]
                 buildings.append({"id": identifier, "name": primary["name"] if primary else t.get("name", "Campus building"),
                     "polygons": polygons, "anchor": anchor, "height": height, "levels": primary["floors"] if primary else round(level),
                     "district": primary["district"] if primary else nearest_district(anchor),
                     "locations": [loc["id"] for loc in overrides], "profile": primary["id"] if primary else None,
                     "source": f"https://www.openstreetmap.org/{element.tag}/{element.get('id')}",
-                    "heightSource": primary["heightSource"] if primary else "OSM height/floors; contradictory heights replaced by estimated 3.6 m per floor.",
+                    "heightSource": primary["heightSource"] if primary else context.get("heightSource", "OSM height/floors; contradictory heights replaced by estimated 3.6 m per floor."),
                     "sourceHeight": t.get("height"), "sourceLevels": t.get("building:levels")})
             else:
                 surfaces.append({"id": identifier, "name": t.get("name", ""), "kind": "park" if t.get("leisure") == "park" else "paving" if t.get("highway") else "water" if t.get("natural") == "water" else "green", "polygons": polygons})
@@ -193,7 +203,11 @@ def build(raw, config):
                     chunk.append(p)
                 else:
                     if len(chunk) >= 2:
-                        paths.append({"id": identifier + f"-{len(paths)}", "points": chunk, "width": min(12, max(1, width)), "kind": "road" if road else "steps" if t["highway"] == "steps" else "path", "name": t.get("name", "")})
+                        paths.append({"id": identifier + f"-{len(paths)}", "sourceId": identifier,
+                                      "points": chunk, "width": min(12, max(1, width)),
+                                      "kind": "road" if road else "steps" if t["highway"] == "steps" else "path",
+                                      "name": t.get("name", ""), "bridge": t.get("bridge", "no") != "no",
+                                      "layer": int(t.get("layer", "0")), "tunnel": t.get("tunnel", "no") != "no"})
                     chunk = []
 
     by_id = {f["id"]: f for f in buildings}

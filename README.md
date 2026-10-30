@@ -40,7 +40,7 @@ The worker bootstraps an empty volume, catches up after downtime, and refreshes 
 
 The academic campus contains 464 real building footprints, eight districts, architectural profiles, Aldrich Park, Ring Mall, and schedule-backed badges. Drag to pan, pinch/wheel to zoom, or use the district menu and keyboard. Window panes remain visible at all zoom levels. Cyan selections follow building geometry. The 67 fixture building codes are audited: 352 rooms are mapped and two UCI locations are explicitly outside this map.
 
-Walking estimates use real coordinates from ALP: distance × 1.3 at 80 meters/minute. Off-map or unverified locations remain searchable without a walking estimate. Heights and architectural details are visual approximations.
+Walking estimates use real coordinates from ALP: distance × 1.3 at 80 meters/minute. Off-map or unverified locations remain searchable without a walking estimate. Map settings offer a locally bundled USGS bare-earth heightmap, on by default, with initial relief of 1.5× and a 0.5×–3× slider. Terrain shadows default off; building shadows default on. The shadow controls are independent, and all preferences are saved in this browser. Ten pedestrian bridges are modeled, including the flat Humanities–Student Center crossing, third-floor Mesa Parking connection, elevated Student Center terrace, and Watson spiral ramp. Their reference views are available in the desktop Explore menu. Building heights and structural details are visual approximations.
 
 Use `?map=schematic` for the original drawing or `?map=alp` for the approved ALP composition. See [sources and maintenance](docs/campus-map.md), the [building audit](docs/campus-building-audit.md), and [ALP model notes](docs/alp-map.md).
 

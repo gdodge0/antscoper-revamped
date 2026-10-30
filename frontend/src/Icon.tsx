@@ -8,6 +8,7 @@ export type IconName =
   | "share"
   | "plus"
   | "minus"
+  | "settings"
   | "info";
 const paths: Record<IconName, string> = {
   search: "M192 112a80 80 0 1 1-160 0 80 80 0 0 1 160 0ZM172 172l52 52",
@@ -20,6 +21,8 @@ const paths: Record<IconName, string> = {
   share: "M80 96H48v120h160V96h-32M128 152V24m-40 40 40-40 40 40",
   plus: "M128 48v160M48 128h160",
   minus: "M48 128h160",
+  settings:
+    "M40 64h64m40 0h72M40 128h112m40 0h24M40 192h32m40 0h104M104 44v40m48 24v40M72 172v40",
   info: "M224 128a96 96 0 1 1-192 0 96 96 0 0 1 192 0ZM128 112v64m0-96v1",
 };
 export function Icon({

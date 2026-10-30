@@ -10,8 +10,15 @@ import {
   roomAtLocation,
 } from "../locations";
 import { Icon } from "../Icon";
-import { createCampusScene, type DetailState } from "./campusScene";
+import {
+  createCampusScene,
+  type DetailState,
+  type CampusViewSnapshot,
+} from "./campusScene";
 import "./map.css";
+import { bridgeProfiles } from "./bridgeProfiles";
+import { MapSettingsPanel } from "./MapSettingsPanel";
+import { readMapSettings, saveMapSettings } from "./mapSettings";
 
 const mapped = campusLocations.filter((l) => l.status === "verified");
 export default function FullCampusMap({
@@ -30,6 +37,9 @@ export default function FullCampusMap({
   const host = useRef<HTMLDivElement>(null),
     labels = useRef(new Map<string, HTMLElement>()),
     api = useRef<ReturnType<typeof createCampusScene> | null>(null);
+  const savedView = useRef<CampusViewSnapshot | undefined>(undefined);
+  const [settings, setSettings] = useState(readMapSettings);
+  const [terrainSettings, setTerrainSettings] = useState(settings);
   const pick = useRef(onBuilding);
   pick.current = onBuilding;
   const [failed, setFailed] = useState(false),
@@ -37,6 +47,21 @@ export default function FullCampusMap({
     [detail, setDetail] = useState<DetailState>({ loading: 0, failed: [] }),
     [district, setDistrict] = useState("");
   const [params, setParams] = useSearchParams();
+  useEffect(() => {
+    saveMapSettings(settings);
+    // Coalesce slider input so a drag builds geometry only after a short pause.
+    const timer = window.setTimeout(
+      () =>
+        setTerrainSettings((current) =>
+          current.heightmap === settings.heightmap &&
+          current.relief === settings.relief
+            ? current
+            : settings,
+        ),
+      200,
+    );
+    return () => window.clearTimeout(timer);
+  }, [settings]);
   const counts = useMemo(
     () =>
       Object.fromEntries(
@@ -96,18 +121,34 @@ export default function FullCampusMap({
         (id) => pick.current(id),
         () => setFailed(true),
         setDetail,
+        terrainSettings,
+        savedView.current,
       );
     } catch (error) {
       console.warn("Campus map unavailable", error);
       setFailed(true);
     }
     return () => {
+      savedView.current = api.current?.snapshot();
       api.current?.dispose();
       api.current = null;
     };
-  }, [attempt, failed]);
-  useEffect(() => api.current?.select(selected), [selected, attempt, failed]);
+  }, [attempt, failed, terrainSettings]);
+  useEffect(
+    () => api.current?.select(selected),
+    [selected, attempt, failed, terrainSettings],
+  );
   useEffect(() => api.current?.redraw(), [counts, districtCounts]);
+  useEffect(
+    () => api.current?.setShadows(settings),
+    [
+      settings.terrainShadows,
+      settings.buildingShadows,
+      terrainSettings,
+      attempt,
+      failed,
+    ],
+  );
   const selectedLocation = locationForCode(selected),
     outside = !!selected && selectedLocation?.status !== "verified";
   function switchMap(mode: string) {
@@ -123,7 +164,8 @@ export default function FullCampusMap({
   }
   function goDistrict(id: string) {
     setDistrict(id);
-    if (id) api.current?.focusDistrict(id);
+    if (id.startsWith("bridge:")) api.current?.focusBridge(id.slice(7));
+    else if (id) api.current?.focusDistrict(id);
     else api.current?.reset();
   }
   const districtMenu = (
@@ -142,6 +184,21 @@ export default function FullCampusMap({
             {d.name}
           </option>
         ))}
+        <optgroup label="Pedestrian bridges">
+          {[
+            "w171169264",
+            "w624135494",
+            "w171169276",
+            "w155705065",
+            "w171194239",
+            "w171169265",
+            "w1196280279",
+          ].map((id) => (
+            <option key={id} value={`bridge:${id}`}>
+              {bridgeProfiles[id].name}
+            </option>
+          ))}
+        </optgroup>
       </select>
     </div>
   );
@@ -284,6 +341,11 @@ export default function FullCampusMap({
         >
           <Icon name="location" />
         </button>
+        <MapSettingsPanel
+          settings={settings}
+          onChange={setSettings}
+          disabled={failed}
+        />
       </div>
       <div
         className="iso-north"
@@ -318,12 +380,23 @@ export default function FullCampusMap({
           >
             © OpenStreetMap contributors
           </a>
+          {" · "}
+          <a
+            href="https://www.usgs.gov/3d-elevation-program"
+            target="_blank"
+            rel="noreferrer"
+          >
+            USGS 3DEP terrain
+          </a>
           <button onClick={() => switchMap("schematic")}>
             Lightweight map ↗
           </button>
         </div>
         <span className="map-accuracy">
-          Stylized architecture · Approximate heights
+          Stylized architecture ·{" "}
+          {terrainSettings.heightmap
+            ? `Terrain relief ×${terrainSettings.relief.toFixed(1)}`
+            : "Heightmap off"}
         </span>
       </div>
     </section>

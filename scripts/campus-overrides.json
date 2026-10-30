@@ -1742,5 +1742,12 @@
   "excludeGeometry": {
     "w171169252": "Langson Library duplicates the co-located layer=1 building w1374185239; outlines are identical apart from collinear nodes."
   },
-  "retrievedAt": "2026-10-29"
+  "retrievedAt": "2026-10-29",
+  "contextGeometry": {
+    "w171169301": {
+      "levels": 5,
+      "height": 15,
+      "heightSource": "Five parking levels represented at approximately 3 m spacing. Third-floor bridge connection verified by UCI Arts directions; exterior heights are visual estimates."
+    }
+  }
 }

@@ -17,6 +17,7 @@
     "worker": "python3 -B -m worker serve --root .runtime",
     "test:browser": "npm run test:browser --workspace frontend",
     "map:import": "python3 -B scripts/import_campus.py",
-    "map:check": "python3 -B scripts/import_campus.py --check"
+    "map:check": "python3 -B scripts/import_campus.py --check && python3 -B scripts/import_terrain.py --check",
+    "map:terrain:import": "python3 -B scripts/import_terrain.py"
   }
 }

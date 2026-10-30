@@ -11,6 +11,10 @@ Repository: `gdodge0/antscoper-revamped`; SSH remote: `git@github.com:gdodge0/an
 
 The configured Coolify GitHub App receives main pushes and deploys the merged commit. Branch protection gates normal merges on CI. Administrator bypass can also bypass those checks; inspect CI before using it. No private Coolify API endpoint needs to be reachable from a GitHub runner.
 
+CI also runs on `release/**` pushes, allowing a candidate to complete **Frontend**, **Worker**, **Browser**, and **Containers** before it reaches main. Validate the exact release commit on that branch, then promote it through the normal pull-request process (or an explicitly authorized fast-forward release). A main push starts Coolify immediately; it does not wait for the new main CI run. Never promote an unchecked candidate or bypass a failing check.
+
+The October 29 header release (`9ee406e`) built and deployed successfully but failed its Browser check: the tablet sheet-gesture test exhausted the 30-second test budget near the end of a long combined scenario. The gesture coverage is now split into independent swipe, control/cancellation/keyboard, and list-scrolling scenarios. Each retains the standard 30-second timeout and all prior state assertions. Terrain data validation also runs in the Worker check.
+
 `version-3` remains at `5387281612d6036b2182b6c3a1a07caaf044c3ef`, before the revamp. It is a historical reference, not a compatible container rollback target. New changes should use feature branches and pull requests into main.
 
 ## Coolify
