@@ -1,92 +1,143 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
-test("map settings use defaults, preserve the view, and persist relief choices", async ({
-  page,
-}, info) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  const desktop = page.viewportSize()!.width >= 1024;
-  await page.goto(desktop ? "/?building=alp" : "/");
-  const stage = page.locator(".iso-stage");
-  await expect(stage).toHaveAttribute("data-ready", "true");
-  await expect(stage).toHaveAttribute("data-terrain-enabled", "true");
-  if (!desktop)
+async function loaded(page: Page) {
+  await page.locator('.iso-stage[data-ready="true"]').waitFor();
+}
+async function explore(page: Page) {
+  if (page.viewportSize()!.width < 1024) {
     await page.getByRole("button", { name: "Collapse room list" }).click();
+    await expect(page.locator(".app")).toHaveClass(/sheet-collapsed/);
+  }
+  const stage = page.locator(".iso-stage");
   await page
     .locator("#campus-district")
     .selectOption("bridge:w171194239", { force: true });
   await expect(stage).toHaveAttribute("data-view", "w171194239");
-  const beforeZoom = await stage.getAttribute("data-frames");
+  const frame = await stage.getAttribute("data-frames");
   await page.getByRole("button", { name: "Zoom in", exact: true }).click();
-  await expect(stage).not.toHaveAttribute("data-frames", beforeZoom!);
-  const zoom = await stage.getAttribute("data-zoom");
-  const settingsButton = page.getByRole("button", {
+  await expect(stage).not.toHaveAttribute("data-frames", frame!);
+  return {
+    zoom: await stage.getAttribute("data-zoom"),
+    selected: await stage.getAttribute("data-selected"),
+  };
+}
+
+test("map settings defaults and popover dismissal work on every viewport", async ({
+  page,
+}, info) => {
+  await page.goto("/");
+  await loaded(page);
+  const stage = page.locator(".iso-stage");
+  await expect(stage).toHaveAttribute("data-terrain-enabled", "true");
+  const button = page.getByRole("button", {
     name: "Map settings",
     exact: true,
   });
+  await button.click();
   const dialog = page.getByRole("dialog", { name: "Map settings" });
-  await settingsButton.click();
-  await expect(dialog).toBeVisible();
-  await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
-  const toggle = dialog.getByRole("switch", { name: /Heightmap/ });
-  const relief = dialog.getByRole("slider", { name: "Relief scale" });
-  await expect(toggle).toBeChecked();
-  await expect(relief).toHaveValue("1.5");
-  await expect(relief).toBeEnabled();
+  await expect(button).toHaveAttribute("aria-expanded", "true");
+  await expect(dialog.getByRole("switch", { name: /Heightmap/ })).toBeChecked();
   await expect(
     dialog.getByRole("switch", { name: /Terrain shadows/ }),
   ).not.toBeChecked();
   await expect(
     dialog.getByRole("switch", { name: /Building shadows/ }),
   ).toBeChecked();
-  const bounds = await dialog.boundingBox();
-  expect(bounds!.x).toBeGreaterThanOrEqual(0);
-  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(
+  const relief = dialog.getByRole("slider", { name: "Relief scale" });
+  await expect(relief).toHaveValue("1.5");
+  await expect(relief).toBeEnabled();
+  const bounds = (await dialog.boundingBox())!;
+  expect(bounds.x).toBeGreaterThanOrEqual(0);
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(
     page.viewportSize()!.width,
   );
   await page.screenshot({ path: info.outputPath("settings-default.png") });
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
-  await expect(settingsButton).toBeFocused();
-  await settingsButton.click();
-  await toggle.check();
-  await expect(stage).toHaveAttribute("data-terrain-enabled", "true");
-  await expect(stage).toHaveAttribute("data-ready", "true");
-  await expect(stage).toHaveAttribute("data-view", "w171194239");
-  await expect(stage).toHaveAttribute("data-zoom", zoom!);
-  if (desktop) await expect(stage).toHaveAttribute("data-selected", "alp");
-  await expect(relief).toBeEnabled();
-  await relief.focus();
-  await relief.press("End");
-  await expect(stage).toHaveAttribute("data-terrain-relief", "3");
-  await expect(stage).toHaveAttribute("data-ready", "true");
-  await expect(stage).toHaveAttribute("data-view", "w171194239");
-  await expect(stage).toHaveAttribute("data-zoom", zoom!);
-  await expect(page.locator(".iso-stage canvas")).toHaveCount(1);
-  await page.screenshot({ path: info.outputPath("settings-relief.png") });
-  await relief.press("Home");
-  await expect(stage).toHaveAttribute("data-terrain-relief", "0.5");
-  await expect(stage).toHaveAttribute("data-ready", "true");
-  await page.reload();
-  await expect(stage).toHaveAttribute("data-ready", "true");
-  await expect(stage).toHaveAttribute("data-terrain-enabled", "true");
-  await expect(stage).toHaveAttribute("data-terrain-relief", "0.5");
-  await settingsButton.click();
-  await toggle.uncheck();
-  await expect(stage).toHaveAttribute("data-terrain-enabled", "false");
-  await expect(stage).toHaveAttribute("data-ready", "true");
-  await expect(relief).toHaveValue("0.5");
-  await expect(relief).toBeDisabled();
+  await expect(button).toBeFocused();
+  await button.click();
   await page.mouse.click(2, 2);
   await expect(dialog).toBeHidden();
+});
+
+test("relief changes preserve the map view and building selection", async ({
+  page,
+}, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  const desktop = page.viewportSize()!.width >= 1024;
+  await page.goto(desktop ? "/?building=alp" : "/");
+  await loaded(page);
+  const before = await explore(page),
+    stage = page.locator(".iso-stage");
+  await page.getByRole("button", { name: "Map settings", exact: true }).click();
+  const slider = page.getByRole("slider", { name: "Relief scale" });
+  await slider.focus();
+  await slider.press("End");
+  await page
+    .locator('.iso-stage[data-terrain-relief="3"][data-ready="true"]')
+    .waitFor();
+  await expect(stage).toHaveAttribute("data-terrain-relief", "3");
+  await loaded(page);
+  await expect(stage).toHaveAttribute("data-view", "w171194239");
+  await expect(stage).toHaveAttribute("data-zoom", before.zoom!);
+  await expect(stage).toHaveAttribute("data-selected", before.selected!);
+  if (desktop) await expect(stage).toHaveAttribute("data-selected", "alp");
+  await expect(page.locator(".iso-stage canvas")).toHaveCount(1);
+  await page.screenshot({ path: info.outputPath("settings-relief.png") });
+  await slider.press("Home");
+  await page
+    .locator('.iso-stage[data-terrain-relief="0.5"][data-ready="true"]')
+    .waitFor();
+  await expect(stage).toHaveAttribute("data-terrain-relief", "0.5");
+  await loaded(page);
+  await expect(stage).toHaveAttribute("data-view", "w171194239");
+  await expect(stage).toHaveAttribute("data-zoom", before.zoom!);
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem("antscoper.map-settings.v1")!).relief,
+    ),
+  ).toBe(0.5);
+  expect(errors).toEqual([]);
+});
+
+test("heightmap choice retains saved relief after a reload", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem("antscoper.map-settings.v1"))
+      localStorage.setItem(
+        "antscoper.map-settings.v1",
+        JSON.stringify({ heightmap: true, relief: 0.5 }),
+      );
+  });
+  await page.goto("/");
+  await loaded(page);
+  const stage = page.locator(".iso-stage");
+  await expect(stage).toHaveAttribute("data-terrain-relief", "0.5");
+  const button = page.getByRole("button", {
+    name: "Map settings",
+    exact: true,
+  });
+  await button.click();
+  const dialog = page.getByRole("dialog", { name: "Map settings" });
+  await dialog.getByRole("switch", { name: /Heightmap/ }).uncheck();
+  await page
+    .locator('.iso-stage[data-terrain-enabled="false"][data-ready="true"]')
+    .waitFor();
+  await expect(stage).toHaveAttribute("data-terrain-enabled", "false");
+  await loaded(page);
+  const slider = dialog.getByRole("slider", { name: "Relief scale" });
+  await expect(slider).toHaveValue("0.5");
+  await expect(slider).toBeDisabled();
   await page.reload();
-  await expect(stage).toHaveAttribute("data-ready", "true");
+  await loaded(page);
   await expect(stage).toHaveAttribute("data-terrain-enabled", "false");
   await expect(stage).toHaveAttribute("data-terrain-relief", "0.5");
   const frame = await stage.getAttribute("data-frames");
   await page.waitForTimeout(300);
   await expect(stage).toHaveAttribute("data-frames", frame!);
-  expect(errors).toEqual([]);
 });
 
 test("terrain and building shadows change independently without rebuilding the map", async ({
@@ -104,7 +155,7 @@ test("terrain and building shadows change independently without rebuilding the m
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
   const stage = page.locator(".iso-stage");
-  await expect(stage).toHaveAttribute("data-ready", "true");
+  await page.locator('.iso-stage[data-ready="true"]').waitFor();
   await page.evaluate(() => document.fonts.ready);
   if (page.viewportSize()!.width < 1024)
     await page.getByRole("button", { name: "Collapse room list" }).click();
@@ -157,7 +208,7 @@ test("terrain and building shadows change independently without rebuilding the m
   expect(both.equals(terrainOnly)).toBe(false);
   await state(true, false, "saved-shadows");
   await page.reload();
-  await expect(stage).toHaveAttribute("data-ready", "true");
+  await page.locator('.iso-stage[data-ready="true"]').waitFor();
   await expect(stage).toHaveAttribute("data-terrain-shadows", "true");
   await expect(stage).toHaveAttribute("data-building-shadows", "false");
   await expect(stage).toHaveAttribute("data-building-shadow-casters", "0");
