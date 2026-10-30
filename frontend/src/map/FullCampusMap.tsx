@@ -153,13 +153,7 @@ export default function FullCampusMap({
     >
       <div className={`iso-heading${headerPreview ? " map-intro-panel" : ""}`}>
         {headerPreview ? (
-          <>
-            <div className="map-intro-topline">
-              <span className="eyebrow">University of California, Irvine</span>
-              <span className="map-intro-mark">UCI</span>
-            </div>
-            <h2>A little room on campus</h2>
-          </>
+          <span className="eyebrow">University of California, Irvine</span>
         ) : (
           <>
             <span className="eyebrow">University of California, Irvine</span>
@@ -168,7 +162,9 @@ export default function FullCampusMap({
             </h2>
           </>
         )}
-        <p>Explore a district. Find your next quiet corner.</p>
+        {!headerPreview && (
+          <p>Explore a district. Find your next quiet corner.</p>
+        )}
         {headerPreview && districtMenu}
       </div>
       {!headerPreview && districtMenu}
