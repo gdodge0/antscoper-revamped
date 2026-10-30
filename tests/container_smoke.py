@@ -71,11 +71,14 @@ def main():
         seed(second)
         assert json.loads(get('/data/snapshot.json')[1])['metadata']['publicationId'] == second['metadata']['publicationId']
         run('restart', web, worker)
+        # Docker may allocate a new ephemeral host port when restarting a container.
+        base = 'http://' + run('port', web, '8080/tcp').splitlines()[0]
         for _ in range(30):
             try:
                 if get('/health')[0] == 200:break
             except OSError:pass
             time.sleep(0.2)
+        else:raise AssertionError('Web did not become ready after restart')
         assert json.loads(get('/data/snapshot.json')[1])['metadata']['publicationId'] == second['metadata']['publicationId']
         backups = json.loads(run('exec', worker, 'python', '-c', "from pathlib import Path;import json;print(json.dumps(sorted(str(p) for p in Path('/var/lib/antscoper/backups').glob('*.json.gz'))))"))
         first = next(path for path in backups if data['metadata']['publicationId'] in path)
