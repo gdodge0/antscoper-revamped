@@ -1072,6 +1072,16 @@ kbd {
   }
 }
 @media (max-width: 1023px) {
+  html,
+  body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  body {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+  }
   .app {
     --mobile-toolbar-top: calc(env(safe-area-inset-top) + 16px);
     --mobile-toolbar-height: 46px;
@@ -1353,6 +1363,7 @@ kbd {
       calc(env(safe-area-inset-bottom) + 24px);
     gap: 16px;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .detail-mobile-nav {
     display: flex;

@@ -511,7 +511,9 @@ function Workspace({
   const demo = source.metadata.mode !== "live";
   const demoPreview = demo && params.get("live") !== "1";
   const [clock, setClock] = useState(campusClock);
+  const [scrubTime, setScrubTime] = useState<number | null>(null);
   const preview =
+    scrubTime !== null ||
     validDate(params.get("date")) ||
     parseTime(params.get("time")) !== null ||
     demoPreview;
@@ -521,7 +523,10 @@ function Workspace({
       ? source.metadata.demoDate || "2026-10-29"
       : clock.date;
   const day = weekday(selectedDate),
-    time = parseTime(params.get("time")) ?? (demoPreview ? 855 : clock.time);
+    time =
+      scrubTime ??
+      parseTime(params.get("time")) ??
+      (demoPreview ? 855 : clock.time);
   const data = useMemo(
     () => projectWeek(source, selectedDate),
     [source, selectedDate, clock],
@@ -652,12 +657,15 @@ function Workspace({
     updateParams({ date, time: urlTime(time), live: null });
   }
   function chooseTime(value: number) {
+    // Keep the released value visible until the router commits the new URL.
+    setScrubTime(value);
     updateParams(
       { date: selectedDate, time: urlTime(value), live: null },
       true,
     );
   }
   function now() {
+    setScrubTime(null);
     setClock(campusClock());
     updateParams({ date: null, time: null, live: demo ? "1" : null });
   }
@@ -665,6 +673,9 @@ function Workspace({
     const timer = setInterval(() => setClock(campusClock()), 30000);
     return () => clearInterval(timer);
   }, []);
+  useEffect(() => {
+    setScrubTime(null);
+  }, [params]);
   useEffect(() => {
     function key(e: KeyboardEvent) {
       if (
@@ -1013,7 +1024,8 @@ function Workspace({
               rooms={data.rooms}
               day={day}
               time={time}
-              onChange={chooseTime}
+              onChange={setScrubTime}
+              onCommit={chooseTime}
             />
             <div className="filters">
               <button

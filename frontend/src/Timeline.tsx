@@ -1,5 +1,5 @@
 import { addDays, dateLabel, startOfWeek } from "./dates";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   availability,
   CLOSE,
@@ -119,24 +119,75 @@ export function TimeDial({
   day,
   time,
   onChange,
+  onCommit,
 }: {
   rooms: Room[];
   day: number;
   time: number;
   onChange: (value: number) => void;
+  onCommit: (value: number) => void;
 }) {
-  const drag = useRef<{ x: number; time: number } | null>(null);
-  const counts = Array.from(
-    { length: 30 },
-    (_, i) =>
-      rooms.filter(
-        (r) => availability(r, day, OPEN + i * 30 + 15).state === "free",
-      ).length,
+  const drag = useRef<{ id: number; x: number; time: number } | null>(null);
+  const keyboard = useRef<number | null>(null);
+  const frame = useRef<number | null>(null);
+  const pending = useRef<number | null>(null);
+  const counts = useMemo(
+    () =>
+      Array.from(
+        { length: 30 },
+        (_, i) =>
+          rooms.filter(
+            (r) => availability(r, day, OPEN + i * 30 + 15).state === "free",
+          ).length,
+      ),
+    [rooms, day],
   );
   const max = Math.max(1, ...counts),
     min = Math.min(...counts);
-  const set = (t: number) =>
-    onChange(Math.max(OPEN, Math.min(CLOSE, Math.round(t / 15) * 15)));
+  const clamp = (t: number) => Math.max(OPEN, Math.min(CLOSE, t));
+  const rounded = (t: number) => clamp(Math.round(t / 15) * 15);
+  function cancelFrame() {
+    if (frame.current !== null) cancelAnimationFrame(frame.current);
+    frame.current = null;
+    pending.current = null;
+  }
+  useEffect(() => cancelFrame, []);
+  function preview(value: number) {
+    pending.current = value;
+    if (frame.current === null) {
+      frame.current = requestAnimationFrame(() => {
+        frame.current = null;
+        const next = pending.current;
+        pending.current = null;
+        if (next !== null) onChange(next);
+      });
+    }
+  }
+  function move(id: number, x: number) {
+    const current = drag.current;
+    if (!current || current.id !== id) return;
+    const previous = rounded(current.time);
+    // Clamp the unrounded position on every move, discarding overshoot at either
+    // end while retaining small movements until they add up to a 15-minute step.
+    current.time = clamp(current.time + (current.x - x) * 1.5);
+    current.x = x;
+    const next = rounded(current.time);
+    if (next !== previous) preview(next);
+  }
+  function finishPointer(id: number) {
+    const current = drag.current;
+    if (!current || current.id !== id) return;
+    drag.current = null;
+    cancelFrame();
+    onCommit(rounded(current.time));
+  }
+  function finishKeyboard() {
+    if (keyboard.current === null) return;
+    const value = keyboard.current;
+    keyboard.current = null;
+    cancelFrame();
+    onCommit(value);
+  }
   return (
     <div
       className="time-dial"
@@ -150,29 +201,47 @@ export function TimeDial({
       onKeyDown={(e) => {
         if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) {
           e.preventDefault();
-          set(
+          keyboard.current = rounded(
             e.key === "Home"
               ? OPEN
               : e.key === "End"
                 ? CLOSE
-                : time + (e.key === "ArrowRight" ? 15 : -15),
+                : (keyboard.current ?? time) +
+                  (e.key === "ArrowRight" ? 15 : -15),
           );
+          preview(keyboard.current);
         }
       }}
+      onKeyUp={(e) => {
+        if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key))
+          finishKeyboard();
+      }}
+      onBlur={() => {
+        finishKeyboard();
+        if (drag.current) finishPointer(drag.current.id);
+      }}
       onPointerDown={(e) => {
-        drag.current = { x: e.clientX, time };
+        if (!e.isPrimary || e.button !== 0) return;
+        drag.current = {
+          id: e.pointerId,
+          x: e.clientX,
+          time: keyboard.current ?? time,
+        };
+        keyboard.current = null;
         e.currentTarget.setPointerCapture(e.pointerId);
+        e.currentTarget.focus({ preventScroll: true });
       }}
       onPointerMove={(e) => {
-        if (drag.current)
-          set(drag.current.time + (drag.current.x - e.clientX) * 1.5);
+        move(e.pointerId, e.clientX);
       }}
-      onPointerUp={() => {
-        drag.current = null;
+      onPointerUp={(e) => {
+        move(e.pointerId, e.clientX);
+        finishPointer(e.pointerId);
       }}
-      onPointerCancel={() => {
-        drag.current = null;
+      onPointerCancel={(e) => {
+        finishPointer(e.pointerId);
       }}
+      onLostPointerCapture={(e) => finishPointer(e.pointerId)}
     >
       <div
         className="dial-strip"

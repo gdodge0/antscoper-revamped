@@ -3,10 +3,7 @@ import { readFileSync } from "node:fs";
 import type { Room } from "../../src/model";
 import type { CampusLocation } from "../../src/locations";
 const snapshot = JSON.parse(
-  readFileSync(
-    new URL("../../fixtures/demo.json", import.meta.url),
-    "utf8",
-  ),
+  readFileSync(new URL("../../fixtures/demo.json", import.meta.url), "utf8"),
 ) as { rooms: Room[] };
 const manifest = JSON.parse(
   readFileSync(
@@ -172,6 +169,8 @@ test("mobile sheet swipes and taps can always return to the split view", async (
         ),
       )
       .toBe(false);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    expect((await app.boundingBox())!.y).toBe(0);
     if (expected === "half") {
       expect((await panel.boundingBox())!.y).toBeCloseTo(initialTop, 0);
       await expect(page.locator(".iso-stage canvas")).toBeVisible();
@@ -217,6 +216,30 @@ test("mobile sheet swipes and taps can always return to the split view", async (
   await swipe(40, 0, true);
   await state("half");
   await swipe(-40);
+  await state("full");
+  // Lock the document while retaining native scrolling inside the room list.
+  const list = page.locator(".results-scroll"),
+    listBox = (await list.boundingBox())!;
+  const listX = listBox.x + listBox.width / 2;
+  const listY = listBox.y + Math.min(listBox.height - 25, 200);
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [{ x: listX, y: listY, id: 0 }],
+  });
+  for (let i = 1; i <= 8; i++) {
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchMove",
+      touchPoints: [{ x: listX, y: listY - i * 15, id: 0 }],
+    });
+    await page.waitForTimeout(16);
+  }
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchEnd",
+    touchPoints: [],
+  });
+  await expect
+    .poll(() => list.evaluate((el) => el.scrollTop))
+    .toBeGreaterThan(0);
   await state("full");
   await swipe(-40);
   await state("full");
